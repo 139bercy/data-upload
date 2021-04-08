@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+
+  postgres:
+    image: postgres:13-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+      POSTGRES_USER: ${PGUSER}
+      PGUSER: ${PGUSER}
+      PGPASSWORD: ${PGPASSWORD}
+    healthcheck:
+     test: ["CMD-SHELL", "pg_isready -U admin"]
+     interval: 10s
+     timeout: 5s
+     retries: 5
+
+  backend:
+    # image:
+    build:
+      context: backend/
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGHOST: postgres
+      PGDATABASE: ${PGDATABASE:-drag_n_drop}
+      PGUSER: ${PGUSER}
+      PGPASSWORD: ${PGPASSWORD}
+      SECRET: ${SECRET}
+
+  nginx-frontend:
+    # image:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+      args:
+        ENABLED_MODULES: "headers-more"
+    ports:
+      - 80:80
+      - 443:443
+    restart: unless-stopped
+    environment:
+      HOSTNAME: ${HOSTNAME}
+      SSL_CERTIFICATE: ${SSL_CERTIFICATE}

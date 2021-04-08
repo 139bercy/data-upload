@@ -1,0 +1,68 @@
+version: "3.9"
+
+services:
+
+  postgres:
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+      PGUSER: admin
+      PGPASSWORD: admin
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    ports:
+      - 5432:5432
+
+  postgress-initialisation:
+    image: postgres:13-alpine
+    environment:
+      PGHOST: postgres
+      PGUSER: admin
+      PGPASSWORD: admin
+      SECRET: 'my-secret'
+    command: psql -c "CREATE DATABASE testdb"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  backend:
+    image: backend:dev
+    build:
+      context: backend/
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/src/app
+    environment:
+      PGHOST: postgres
+      PGDATABASE: testdb
+      PGUSER: admin
+      PGPASSWORD: admin
+      PORT: 8080
+      SECRET: 'my-secret'
+      RESET: 'false'
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: admin
+      ADMIN_EMAIL: admin@admin.admin
+    command: node --trace-deprecation --unhandled-rejections=strict /src/app/server.js
+
+  frontend:
+    image: frontend:dev
+    build:
+      context: frontend/
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      PORT: 8080
+    volumes:
+      - ./frontend/:/src/app/
+
+  nginx-frontend:
+    image: nginx:dev
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/nginx-headers.conf:/etc/nginx/general-security-headers.conf
+      - ./nginx/site.dev.conf:/etc/nginx/conf.d/default.conf
+
+volumes:
+  postgres_data:
