@@ -21,7 +21,13 @@ Il faut ensuite initialiser la base de données :
 bash reset.sh
 ```
 
-Après l'exécution de ces 2 commandes, vous devriez pouvoir accéder à l'interface depuis un navigateur à l'adresse [`http://localhost`](http://localhost).
+Si vous avez de nouvelle dépendances dans votre `package.json` du dossier `backend` ou `frontend`, je vous invite à relancer la commande suivante :
+```sh
+bash install-dependencies.sh
+```
+Cette commande doit aussi être lancé lors de la récupération du projet.
+
+Après l'exécution de ces 2 (ou 3) commandes, vous devriez pouvoir accéder à l'interface depuis un navigateur à l'adresse [`http://localhost`](http://localhost).
 
 Si vous souhaitez arrêter l'application, vous pouvez exécuter la commande suivante :
 ```sh

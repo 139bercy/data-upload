@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import UserService from "../services/user.service";
 import Dropzone from "react-dropzone";
+import authHeader from "../services/auth-header";
 
 class Home extends Component {
   constructor(props) {
@@ -19,7 +20,7 @@ class Home extends Component {
           console.log(file.name);
           const formData = new FormData();
           formData.append(file.name, file);
-          axios.post('http://localhost/api/upload', formData)
+          axios.post('http://localhost/api/upload', formData, { headers: authHeader() })
           .then(res => {
               console.log(res);
           }
