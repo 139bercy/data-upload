@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Switch, Route, Link } from "react-router-dom";
+import { createBrowserHistory } from 'history';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -9,11 +10,15 @@ import Login from "./components/login.component";
 import Home from "./components/home.component";
 import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
+import httpInterceptor from './services/interceptor';
+
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.logOut = this.logOut.bind(this);
+    this.history = history = createBrowserHistory();
+    httpInterceptor.setupInterceptors(history);
 
     this.state = {
       showModeratorBoard: false,
