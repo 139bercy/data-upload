@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import axios from 'axios';
 
-import UserService from "../services/user.service";
 import Dropzone from "react-dropzone";
 import authHeader from "../services/auth-header";
 
@@ -31,24 +30,6 @@ class Home extends Component {
     this.state = {
       content: ""
     };
-  }
-
-  componentDidMount() {
-    UserService.getPublicContent().then(
-      response => {
-        this.setState({
-          content: response.data
-        });
-      },
-      error => {
-        this.setState({
-          content:
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString()
-        });
-      }
-    );
   }
 
   render() {
