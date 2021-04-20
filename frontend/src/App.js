@@ -17,8 +17,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.logOut = this.logOut.bind(this);
-    this.history = history = createBrowserHistory();
-    httpInterceptor.setupInterceptors(history);
+    this.history = createBrowserHistory();
+    httpInterceptor.setupInterceptors(this.history);
 
     this.state = {
       showModeratorBoard: false,
