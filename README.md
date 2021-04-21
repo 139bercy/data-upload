@@ -88,6 +88,11 @@ Liens utiles :
 
 Plusieurs scripts sont intégrés dans le projet afin de pouvoir lancer l'application.
 
+Pour commencer, installez les dépendances pour npm dans docker :
+```shell
+bash npm-install.sh
+```
+
 Dans un premier temps, vous devez démarrer l'application :
 ```sh
 bash start.sh
