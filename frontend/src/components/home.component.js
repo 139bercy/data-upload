@@ -13,20 +13,22 @@ class Home extends Component {
           console.log("Rejected ", file.name);
       })
     };
-  
+
     this.onDropAccepted = (acceptedFiles) => {
       acceptedFiles.forEach(file => {
-          console.log(file.name);
           const formData = new FormData();
           formData.append(file.name, file);
-          axios.post('http://localhost/api/upload', formData, { headers: authHeader() })
+          console.log(formData.getAll(file.name));
+          axios.post('/api/upload', formData, { headers: authHeader() })
           .then(res => {
               console.log(res);
           }
-          ).catch(err => console.log(err));
+          ).catch(err => {
+            console.log(err);
+          });
       })
     };
-    
+
     this.state = {
       content: ""
     };
