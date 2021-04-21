@@ -134,3 +134,7 @@ bash logs.sh -f <nom du service>
 ```
 
 Cette option permet de rafraichir dynamiquement les logs afin de les visualiser en continue.
+
+### Annexes 
+
+Les lignes 13 à 14 du fichier `docker-compose.override.dev.yml` sont commenté pour fonctionner en local s'il y à un besoin d'utilisation de celles-ci, les dé-commenter.
