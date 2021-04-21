@@ -87,9 +87,6 @@ Liens utiles :
 Pour tout autres installation la documentation se retrouve sur le site de docker :
 - https://docs.docker.com/get-docker/
 
-Pour tout autres installation la documentation se retrouve sur le site de docker :
-- https://docs.docker.com/get-docker/
-
 ## Développement
 
 Plusieurs scripts sont intégrés dans le projet afin de pouvoir lancer l'application.
