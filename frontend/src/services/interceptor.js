@@ -6,7 +6,7 @@ export default function setupInterceptors(history) {
         return response;
     }, error => {
         if (error.response.status === 401) {
-            user = localStorage.getItem("user");
+            var user = localStorage.getItem("user");
             delete user.accessToken;
             localStorage.setItem("user", user);
             history.push('/login');
