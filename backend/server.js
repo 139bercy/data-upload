@@ -1,10 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const fileUpload = require('express-fileupload');
 const cors = require("cors");
 var bcrypt = require("bcryptjs");
 
 const app = express();
 
+app.use(fileUpload({
+    createParentPath: true
+}));
 // var corsOptions = {
 //   origin: "http://localhost:8081"
 // };
