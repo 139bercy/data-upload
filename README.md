@@ -39,7 +39,7 @@ sudo apt-get update
 
 sudo apt-get install docker-ce docker-ce-cli containerd.io
 ```
-- vérification de l'installation 
+- vérification de l'installation
 ```shell
 sudo docker run hello-world
 ```
@@ -83,7 +83,7 @@ Liens utiles :
 - https://docs.docker.com/engine/install/debian/
 - https://docs.docker.com/engine/install/linux-postinstall/
 - https://docs.docker.com/compose/install/
-  
+
 Pour tout autres installation la documentation se retrouve sur le site de docker :
 - https://docs.docker.com/get-docker/
 
@@ -138,7 +138,7 @@ bash logs.sh -f <nom du service>
 
 Cette option permet de rafraichir dynamiquement les logs afin de les visualiser en continue.
 
-### Annexes 
+### Annexes
 ### postgresql
 - Si vous avez déjà un postgresql qui tourne sur votre machine, les lignes 13-14 du fichier `docker-compose.override.dev.yml` sont commentés afin de ne pas entrer en conflit.
 
