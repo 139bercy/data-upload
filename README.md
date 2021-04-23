@@ -139,5 +139,7 @@ bash logs.sh -f <nom du service>
 Cette option permet de rafraichir dynamiquement les logs afin de les visualiser en continue.
 
 ### Annexes 
+### postgresql
+- Si vous avez déjà un postgresql qui tourne sur votre machine, les lignes 13-14 du fichier `docker-compose.override.dev.yml` sont commentés afin de ne pas entrer en conflit.
 
-Les lignes 13 à 14 du fichier `docker-compose.override.dev.yml` sont commenté pour fonctionner en local s'il y à un besoin d'utilisation de celles-ci, les dé-commenter.
+- Si vous n'en avez pas et que vous souhaitez accéder au serveur postgresql intégré dans ce projet depuis d'autres applications (e.g. IDE), veuillez décommenter ces lignes.
