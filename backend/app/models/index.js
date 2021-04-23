@@ -26,8 +26,10 @@ db.sequelize = sequelize;
 
 db.user = require("../models/user.model.js")(sequelize, Sequelize);
 db.role = require("../models/role.model.js")(sequelize, Sequelize);
+db.environnement = require("../models/environnement.model.js")(sequelize, Sequelize)
 
 require("../models/relation-role-user.js")(db);
+require("../models/relation-environnement-user.js")(db);
 
 db.ROLES = ["user", "admin", "moderator"];
 
