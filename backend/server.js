@@ -29,6 +29,7 @@ app.listen(PORT, () => {
 
 const db = require("./app/models");
 const Role = db.role;
+const Env = db.environnement;
 const User = db.user;
 
 // force will drop the table if it already exists
@@ -47,16 +48,24 @@ async function initial() {
     id: 1,
     name: "user"
   });
-
   Role.create({
     id: 2,
     name: "moderator"
   });
-
   Role.create({
     id: 3,
     name: "admin"
   });
+
+  Env.create({
+    id: 1,
+    name: "plan-relance"
+  });
+  Env.create({
+    id: 2,
+    name: "data-360"
+  });
+
   if (typeof process.env['ADMIN_USERNAME'] == 'string' && typeof process.env['ADMIN_EMAIL'] == 'string' && typeof process.env['ADMIN_PASSWORD'] == 'string') {
     console.log('Création du compte admin depuis les informations d\'environnement fournies');
     User.create({
@@ -64,7 +73,7 @@ async function initial() {
       username: process.env['ADMIN_USERNAME'],
       email: process.env['ADMIN_EMAIL'],
       password: bcrypt.hashSync(process.env['ADMIN_PASSWORD'], 8),
-    }).then(user => user.setRoles([1, 2, 3]))
+    }).then(user => user.setRoles([1, 2, 3])).then(user => user.setEnvs([1,2]))
   } else {
     console.log('Drop and Resync Db');
   }
