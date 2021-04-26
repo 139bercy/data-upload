@@ -47,7 +47,7 @@ services:
       ADMIN_PASSWORD: admin
       ADMIN_EMAIL: admin@admin.admin
       FILE_STORAGE: /storage/
-    command: node --trace-deprecation --unhandled-rejections=strict /src/app/server.js
+    command: ./node_modules/nodemon/bin/nodemon.js /src/app/server.js
 
   frontend:
     image: frontend:dev
