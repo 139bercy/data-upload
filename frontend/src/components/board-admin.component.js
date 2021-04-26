@@ -87,6 +87,7 @@ export default class BoardAdmin extends Component {
 
   render() {
     return (
+      // TODO: use the Table component with the state
       <div className="container">
         <Table columns={columns} data={this.state.users} ></Table>
       </div>
