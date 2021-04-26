@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import UserService from "../services/user.service";
+import Table from "./table-component";
 
 export default class BoardAdmin extends Component {
   constructor(props) {
@@ -16,6 +17,7 @@ export default class BoardAdmin extends Component {
       response => {
         this.setState({
           content: response.data
+          // TODO: SQL request through api around there, store it in state
         });
       },
       error => {
@@ -33,10 +35,9 @@ export default class BoardAdmin extends Component {
 
   render() {
     return (
+      // TODO: use the Table component with the state
       <div className="container">
-        <header className="jumbotron">
-          <h3>Gestion des utilisateurs</h3>
-        </header>
+        <Table>???</Table>
       </div>
     );
   }
