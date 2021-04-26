@@ -25,12 +25,15 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    volumes:
+      - file_storage:/storage
     environment:
       PGHOST: postgres
       PGDATABASE: ${PGDATABASE:-drag_n_drop}
       PGUSER: ${PGUSER}
       PGPASSWORD: ${PGPASSWORD}
       SECRET: ${SECRET}
+      FILE_STORAGE: /storage/
 
   nginx-frontend:
     # image:
@@ -46,3 +49,6 @@ services:
     environment:
       HOSTNAME: ${HOSTNAME}
       SSL_CERTIFICATE: ${SSL_CERTIFICATE}
+
+volumes:
+  file_storage:
