@@ -24,4 +24,5 @@ yarn-error.log*
 yarn.lock
 
 .idea
+<<<<<<< HEAD
 /storage
