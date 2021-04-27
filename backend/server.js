@@ -1,10 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const fileUpload = require('express-fileupload');
 const cors = require("cors");
 var bcrypt = require("bcryptjs");
 
 const app = express();
 
+app.use(fileUpload({
+    createParentPath: true
+}));
 // var corsOptions = {
 //   origin: "http://localhost:8081"
 // };
@@ -20,6 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // set routes
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
+require('./app/routes/upload.routes')(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

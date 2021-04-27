@@ -30,8 +30,11 @@ services:
     build:
       context: backend/
       dockerfile: Dockerfile
+    # ports:
+    #   - 8080:8080
     volumes:
       - ./backend:/src/app
+      - ./backend/storage:/storage
     environment:
       PGHOST: postgres
       PGDATABASE: testdb
@@ -43,7 +46,8 @@ services:
       ADMIN_USERNAME: admin
       ADMIN_PASSWORD: admin
       ADMIN_EMAIL: admin@admin.admin
-    command: node --trace-deprecation --unhandled-rejections=strict /src/app/server.js
+      FILE_STORAGE: /storage/
+    command: ./node_modules/nodemon/bin/nodemon.js /src/app/server.js
 
   frontend:
     image: frontend:dev
