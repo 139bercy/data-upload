@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import axios from 'axios';
 
-import Dropzone from "react-dropzone";
 import Home from "./home.component"
 import authHeader from "../services/auth-header";
 
@@ -16,24 +14,39 @@ class Env extends Component {
       ]
     };
   }
+
   render() {
     let optionTemplate = this.state.values.map(v => (
       <option value={v.id}>{v.name}</option>
     ));
 
+    const ChooseEnv = () =>  {
+
+        console.log("ok" + this.state.values.id);
+        if (this.state.value === "-vide-"){
+              return (
+                <label>
+                    Choisissez le projet dans lequel envoyer les documents:
+                    <select value={this.state.value} onChange={this.handleChange}>
+                      {optionTemplate}
+                    </select>
+                </label>
+              );
+        }
+         else{
+             return (
+              <Home environnement={this.state.value}>
+              </Home>
+             );
+         }
+    }
+
     return (
-    <div>
-      <label>
-        Choisissez le projet dans lequel envoyer les documents:
-        <select value={this.state.value} onChange={this.handleChange}>
-          {optionTemplate}
-        </select>
-      </label>
-      <Home>
-      </Home>
-      </div>
+        <ChooseEnv></ChooseEnv>
     );
   }
 }
+
+
 
 export default Env;
