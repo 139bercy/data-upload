@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import axios from 'axios';
 
-import Env from "./env-component"
 import Dropzone from "react-dropzone";
 import authHeader from "../services/auth-header";
 
@@ -41,8 +40,6 @@ class Home extends Component {
         <header className="jumbotron">
           <h3>Veuillez utiliser le cadre ci-dessous pour envoyer les fichiers de données</h3>
         </header>
-        <Env>
-        </Env>
         <Dropzone
           onDropAccepted={this.onDropAccepted}
           onDropRejected={this.onDropRejected}

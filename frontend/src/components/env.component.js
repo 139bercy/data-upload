@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from 'axios';
 
 import Dropzone from "react-dropzone";
+import Home from "./home.component"
 import authHeader from "../services/auth-header";
 
 class Env extends Component {
@@ -21,12 +22,16 @@ class Env extends Component {
     ));
 
     return (
+    <div>
       <label>
         Choisissez le projet dans lequel envoyer les documents:
         <select value={this.state.value} onChange={this.handleChange}>
           {optionTemplate}
         </select>
       </label>
+      <Home>
+      </Home>
+      </div>
     );
   }
 }
