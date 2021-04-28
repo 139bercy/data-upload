@@ -21,7 +21,7 @@ class Env extends Component {
     ));
 
     const ChooseEnv = () =>  {
-        console.log("okzz" + value);
+        console.log("okzz" + values);
         if (values === "ok"){
               return (
                 <label>
