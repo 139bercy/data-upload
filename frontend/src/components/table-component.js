@@ -1,8 +1,14 @@
-import { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useTable, useFilters, useSortBy } from "react-table";
 
 export default function Table({ columns, data }) {
     const [filterInput, setFilterInput] = useState("");
+
+    const columnsMemo = useMemo(
+        () => columns,
+        []
+      );
+
     const {
         getTableProps,
         getTableBodyProps,
@@ -12,8 +18,8 @@ export default function Table({ columns, data }) {
         setFilter
     } = useTable(
         {
-        columns,
-        data
+            columns: columnsMemo,
+            data: data
         },
         useFilters,
         useSortBy
