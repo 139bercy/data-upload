@@ -29,6 +29,27 @@ class Home extends Component {
       })
     };
 
+    this.onDropRejected = (rejectedFiles) => {
+      rejectedFiles.forEach(file => {
+          console.log("Rejected ", file.name);
+      })
+    };
+
+    this.onDropAccepted = (acceptedFiles) => {
+      acceptedFiles.forEach(file => {
+          const formData = new FormData();
+          formData.append(file.name, file);
+          console.log(formData.getAll(file.name));
+          axios.post('/api/upload', formData, { headers: authHeader() })
+          .then(res => {
+              console.log(res);
+          }
+          ).catch(err => {
+            console.log(err);
+          });
+      })
+    };
+
     this.state = {
       content: ""
     };
