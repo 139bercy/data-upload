@@ -3,9 +3,6 @@ import React, { Component } from "react";
 import Home from "./home.component"
 import authHeader from "../services/auth-header";
 
-
-let envValue = "-vide-";
-
 class Env extends Component {
   constructor(props) {
     super(props);
@@ -17,12 +14,15 @@ class Env extends Component {
       ]
     };
     this.handleChange = this.handleChange.bind(this);
+
+    this.envValue = "-vide-";
   }
   
   handleChange(e) {
     console.log("Env Selected!!");
     console.log(e.target.value);
     this.envValue = e.target.value;
+    this.setState({ env: e.target.name });
   }
 
   render() {

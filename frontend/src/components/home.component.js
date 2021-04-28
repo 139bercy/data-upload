@@ -16,6 +16,7 @@ class Home extends Component {
     this.onDropAccepted = (acceptedFiles) => {
       acceptedFiles.forEach(file => {
           const formData = new FormData();
+          console.log("filename :" + file.name);
           formData.append(file.name, file);
           console.log(formData.getAll(file.name));
           axios.post('/api/upload', formData, { headers: authHeader() })
