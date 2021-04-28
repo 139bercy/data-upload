@@ -21,8 +21,8 @@ class Env extends Component {
     ));
 
     const ChooseEnv = () =>  {
-        console.log("okzz" + values);
-        if (values === "ok"){
+        console.log("okzz");
+        if ("ok" === "ok"){
               return (
                 <label>
                     Choisissez le projet dans lequel envoyer les documents:
