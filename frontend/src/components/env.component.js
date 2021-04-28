@@ -13,6 +13,15 @@ class Env extends Component {
         { name: 'Plan Relance', id: 2 }
       ]
     };
+    this.handleChange = this.handleChange.bind(this);
+  }
+  envValue = "0";
+  
+  handleChange(e) {
+    console.log("Env Selected!!");
+    console.log({env: e.target.value});
+    this.envValue = e.target.value;
+    this.setState({ env: e.target.value });
   }
 
   render() {
@@ -21,8 +30,8 @@ class Env extends Component {
     ));
 
     const ChooseEnv = () =>  {
-        console.log("okzz");
-        if ("ok" === "ok"){
+        console.log(this.envValue);
+        if (this.envValue == 0){
               return (
                 <label>
                     Choisissez le projet dans lequel envoyer les documents:
