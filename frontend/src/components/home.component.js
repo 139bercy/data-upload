@@ -7,7 +7,6 @@ import authHeader from "../services/auth-header";
 class Home extends Component {
   constructor(props) {
     super(props);
-
     this.onDropRejected = (rejectedFiles) => {
       rejectedFiles.forEach(file => {
           console.log("Rejected ", file.name);
@@ -23,7 +22,7 @@ class Home extends Component {
           .then(res => {
               console.log(res);
           }
-          ).catch(err => {
+          ).catch(err => { 
             console.log(err);
           });
       })
@@ -39,6 +38,7 @@ class Home extends Component {
       <div className="container">
         <header className="jumbotron">
           <h3>Veuillez utiliser le cadre ci-dessous pour envoyer les fichiers de données</h3>
+          <h4>Projet from parent is:{this.props.environnement}</h4>
         </header>
         <Dropzone
           onDropAccepted={this.onDropAccepted}
