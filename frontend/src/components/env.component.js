@@ -30,7 +30,6 @@ class Env extends Component {
     ));
 
     const ChooseEnv = () =>  {
-        console.log(this.envValue);
         if (this.envValue == 0){
               return (
                 <label>
@@ -43,7 +42,7 @@ class Env extends Component {
         }
          else{
              return (
-              <Home environnement={this.state.value}>
+              <Home environnement={this.envValue}>
               </Home>
              );
          }
