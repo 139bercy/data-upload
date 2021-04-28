@@ -9,4 +9,22 @@ module.exports = function(app) {
     );
     next();
   });
+
+  app.get(
+    "/api/users",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.findAllUsers
+  );
+
+  app.delete(
+    "/api/users/:id",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.deleteUser
+  );
+
+  app.put(
+    "/api/users/:id",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.updateUser
+  );
 };
