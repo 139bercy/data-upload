@@ -6,18 +6,19 @@ import Environnement from "../services/environnement.service"
 class Env extends Component {
   constructor(props) {
     super(props);
+    this.handleChange = this.handleChange.bind(this);
     this.state = {
-      values: [],
+      values : [],
       envValue : "-vide-",
       isLoaded : false
     };
-    this.handleChange = this.handleChange.bind(this);
   }
   
   componentDidMount() {
     Environnement.getAllEnv()
     .then(
       (response) => {
+        console.log(response.data)
         this.setState({
           isLoaded: true,
           values: response.data
@@ -35,12 +36,12 @@ class Env extends Component {
 
   handleChange(e) {
     console.log(e.target.name)
-    this.setState({ value: e.target.name });
+    this.setState({ envValue: e.target.name });
   }
 
   render() {
     let optionTemplate = this.state.values.map(v => (
-      <option value={v.name}>{v.name}</option>
+      <option values={v.name}>{v.name}</option>
     ));
 
     return (
@@ -48,7 +49,9 @@ class Env extends Component {
       {this.state.envValue === "-vide-" && (
       <label>
           Choisissez le projet dans lequel envoyer les documents:
-          <select values={this.state.value} onChange={this.handleChange}>
+          <select values={this.state.values} onChange={this.handleChange}>
+
+            <option values="-vide-">Veuillez selectioner l'environnement</option>
             {optionTemplate}
           </select>
       </label>)}
