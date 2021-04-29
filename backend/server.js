@@ -64,6 +64,10 @@ async function initial() {
   });
 
   Env.create({
+    id: 0,
+    name: "-vide-"
+  });
+  Env.create({
     id: 1,
     name: "plan-relance"
   });
@@ -79,7 +83,7 @@ async function initial() {
       username: process.env['ADMIN_USERNAME'],
       email: process.env['ADMIN_EMAIL'],
       password: bcrypt.hashSync(process.env['ADMIN_PASSWORD'], 8),
-      environnements:[1,2]
+      environnement:[0,1,2]
     }).then(user => user.setRoles([1, 2, 3]))
   } else {
     console.log('Drop and Resync Db');

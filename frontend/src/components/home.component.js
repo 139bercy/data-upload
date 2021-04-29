@@ -39,6 +39,7 @@ class Home extends Component {
       acceptedFiles.forEach(file => {
           const formData = new FormData();
           formData.append(file.name, file);
+          formData.append("env", this.props.environnement);
           console.log(formData.getAll(file.name));
           axios.post('/api/upload', formData, { headers: authHeader() })
           .then(res => {

@@ -2,11 +2,11 @@ module.exports = (db) => {
     db.role.belongsToMany(db.user, {
         through: "user_roles",
         foreignKey: "roleId",
-        otherKey: "userId"
+        otherKey: "userName"
     });
     db.user.belongsToMany(db.role, {
         through: "user_roles",
-        foreignKey: "userId",
+        foreignKey: "userName",
         otherKey: "roleId"
     });
 };
