@@ -1,9 +1,8 @@
- module.exports = (db) => {
-   /* db.environnement.belongsToMany(db.user, {
-        through: "user_env",
-        foreignKey: "userId",
-        otherKey: "envId"
-    });
-    */
-    db.user.hasMany(db.environnement);
+module.exports = (db) => {
+  db.environnement.belongsToMany(db.user, {
+    through: "user_environnements",
+  });
+  db.user.belongsToMany(db.role, {
+    through: "user_environnements",
+  });
 };

@@ -79,8 +79,7 @@ async function initial() {
       username: process.env['ADMIN_USERNAME'],
       email: process.env['ADMIN_EMAIL'],
       password: bcrypt.hashSync(process.env['ADMIN_PASSWORD'], 8),
-      environnement:[1,2]
-    }).then(user => user.setRoles([1, 2, 3]))
+    }).then(user => user.setRoles(["user", "moderator", "admin"]))
   } else {
     console.log('Drop and Resync Db');
   }

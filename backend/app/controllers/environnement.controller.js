@@ -5,7 +5,6 @@ const Env = db.environnement;
 exports.findAllEnvironnement = (req, res) => {
   Env.findAll()
     .then(data => {
-      console.log(data);
       res.send(data);
     })
     .catch(err => {

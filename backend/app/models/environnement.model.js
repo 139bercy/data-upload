@@ -1,13 +1,8 @@
 module.exports = (sequelize, Sequelize) => {
-    const Environnement = sequelize.define("environnement", {
-      id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true
-      },
+  return sequelize.define("environnement", {
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        primaryKey: true
       }
     });
-
-    return Environnement;
   };

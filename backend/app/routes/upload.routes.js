@@ -11,7 +11,7 @@ module.exports = function(app) {
     });
 
     app.post(
-        "/api/upload",
+        "/api/upload/:environnement",
         [authJwt.verifyToken],
         controller.upload
     );
