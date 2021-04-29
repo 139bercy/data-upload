@@ -2,8 +2,7 @@ const db = require("../models");
 
 const User = db.user;
 
-async function defineRoles(user) {
-  // console.log(user.roles);
+function defineRoles(user) {
   return user.getRoles().then(roles => {
       return {
         ...user.dataValues,
@@ -11,18 +10,18 @@ async function defineRoles(user) {
       };
     }
   );
-  // return user;
 }
 
 exports.findAllUsers = (req, res) => {
-  User.findAll({include: 'roles'})
+  User.findAll({ include: 'roles' })
     .then(users => {
-      return users.map(user => {
-        return defineRoles(user);
+      return Promise.all(
+        users.map(user => {
+          return defineRoles(user);
+        })
+      ).then(users => {
+        res.json(users);
       })
-    })
-    .then(users => {
-      res.json(users);
     })
     .catch(err => {
       console.log(err);

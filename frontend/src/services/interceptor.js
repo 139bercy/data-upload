@@ -6,7 +6,6 @@ export default function setupInterceptors(history) {
     axios.interceptors.request.use(request => {
         if (request.url !== '/login' && request.url !== '/api/auth/signin') {
             const authHeaders = authHeader()
-            console.log(request.url, authHeaders, Object.keys(authHeaders), Object.keys(authHeaders).length)
             if (Object.keys(authHeaders).length === 0) {
                 history.push('/login');
                 return;
