@@ -25,6 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
 require('./app/routes/upload.routes')(app);
+require('./app/routes/environnement.routes')(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
@@ -78,7 +79,8 @@ async function initial() {
       username: process.env['ADMIN_USERNAME'],
       email: process.env['ADMIN_EMAIL'],
       password: bcrypt.hashSync(process.env['ADMIN_PASSWORD'], 8),
-    }).then(user => user.setRoles([1, 2, 3])).then(user => user.setEnvs([1,2]))
+      environnements:[1,2]
+    }).then(user => user.setRoles([1, 2, 3]))
   } else {
     console.log('Drop and Resync Db');
   }
