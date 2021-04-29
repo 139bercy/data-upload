@@ -10,7 +10,8 @@ class Env extends Component {
     this.state = {
       values : [],
       envValue : "-vide-",
-      isLoaded : false
+      isLoaded : false,
+      disable: true
     };
   }
   
@@ -44,19 +45,37 @@ class Env extends Component {
       <option values={v.name}>{v.name}</option>
     ));
 
+    const MyComponent = ({disabled}) => {
+      return (
+          <div style={disabled ? {pointerEvents: "none", opacity: "0.4"} : {}}>
+            <Home environnement={this.state.envValue}></Home>
+          </div>
+      )
+    }
+    const ChooseEnv = () => {
+      return (
+        <label>
+            Choisissez le projet dans lequel envoyer les documents:
+            <select values={this.state.values} onChange={this.handleChange}>
+              <option values="Veuillez selectioner l'environnement" selected="true" disabled="disabled">Veuillez selectioner l'environnement</option>
+              {optionTemplate}
+            </select>
+        </label>
+      )
+    }
     return (
       <div className="container">
-      {this.state.envValue === "-vide-" && (
-      <label>
-          Choisissez le projet dans lequel envoyer les documents:
-          <select values={this.state.values} onChange={this.handleChange}>
-
-            <option values="-vide-">Veuillez selectioner l'environnement</option>
-            {optionTemplate}
-          </select>
-      </label>)}
-        {this.state.envValue !== "-vide-" && (
-          <Home environnement={this.state.envValue}></Home>
+      {this.state.envValue === "Veuillez selectioner l'environnement" && (
+        <div>
+          <ChooseEnv></ChooseEnv>
+          <MyComponent disabled={this.state.disable}></MyComponent>
+        </div>
+      )}
+        {this.state.envValue !== "Veuillez selectioner l'environnement" && (
+          <div>
+            <ChooseEnv></ChooseEnv>
+            <MyComponent disabled={this.state.disable}></MyComponent>
+          </div>
         )
 
         }
