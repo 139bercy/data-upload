@@ -59,8 +59,7 @@ class Home extends Component {
     return (
       <div className="container">
         <header className="jumbotron">
-          <h3>Veuillez utiliser le cadre ci-dessous pour envoyer les fichiers de données</h3>
-          <h4>Projet from parent is:{this.props.environnement}</h4>
+          <h3>Veuillez utiliser le cadre ci-dessous pour envoyer les fichiers de données dans : {this.props.environnement}</h3>
         </header>
         <Dropzone
           onDropAccepted={this.onDropAccepted}
