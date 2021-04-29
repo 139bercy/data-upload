@@ -6,7 +6,7 @@ export default function Table({ columns, data }) {
 
     const columnsMemo = useMemo(
         () => columns,
-        []
+        [columns]
       );
 
     const {

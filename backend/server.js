@@ -1,8 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const fileUpload = require('express-fileupload');
-const cors = require("cors");
-var bcrypt = require("bcryptjs");
+// const cors = require("cors");
+
+require("./app/models");
 
 const app = express();
 
@@ -32,55 +33,3 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
-
-const db = require("./app/models");
-const Role = db.role;
-const User = db.user;
-const Envionnement = db.environnement;
-
-// force will drop the table if it already exists
-db.sequelize.sync({ force: true }).then(() => {
-  if (process.env['RESET']) {
-    console.log('Réinitialisation de la base de données');
-    initial();
-  }
-});
-
-async function initial() {
-
-  // await User.drop();
-  // await Role.drop();
-  Role.create({
-    id: 1,
-    name: "user"
-  });
-
-  Role.create({
-    id: 2,
-    name: "moderator"
-  });
-
-  Role.create({
-    id: 3,
-    name: "admin"
-  });
-
-  Envionnement.create({
-    name: "plan-relance"
-  });
-  Envionnement.create({
-    name: "data-360"
-  });
-
-  if (typeof process.env['ADMIN_USERNAME'] == 'string' && typeof process.env['ADMIN_EMAIL'] == 'string' && typeof process.env['ADMIN_PASSWORD'] == 'string') {
-    console.log('Création du compte admin depuis les informations d\'environnement fournies');
-    User.create({
-      id: 1,
-      username: process.env['ADMIN_USERNAME'],
-      email: process.env['ADMIN_EMAIL'],
-      password: bcrypt.hashSync(process.env['ADMIN_PASSWORD'], 8),
-    }).then(user => user.setRoles([1, 2, 3]))
-  } else {
-    console.log('Drop and Resync Db');
-  }
-}

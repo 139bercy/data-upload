@@ -9,27 +9,31 @@ class UserService {
   }
 
   getUserBoard() {
-    return axios.get(API_URL + '/user', { headers: authHeader() });
+    return axios.get(API_URL + '/user');
   }
 
   getModeratorBoard() {
-    return axios.get(API_URL + '/mod', { headers: authHeader() });
+    return axios.get(API_URL + '/mod');
   }
 
   getAdminBoard() {
-    return axios.get(API_URL + '/admin', { headers: authHeader() });
+    return axios.get(API_URL + '/admin');
   }
 
   getUsers() {
-    return axios.get(API_URL, { headers: authHeader() });
+    return axios.get(API_URL);
+  }
+
+  getUser(user) {
+    return axios.get(API_URL + "/" + user.username);
   }
 
   updateUser(user) {
-    return axios.put(API_URL + '/' + user.username, user, { headers: authHeader() });
+    return axios.put(API_URL + '/' + user.username, user);
   }
 
   deleteUser(user) {
-    return axios.delete(API_URL + '/' + user.username, { headers: authHeader() })
+    return axios.delete(API_URL + '/' + user.username)
   }
 }
 

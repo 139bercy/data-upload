@@ -1,28 +1,45 @@
-exports.allAccess = (req, res) => {
-    res.status(200).send("Public Content.");
-  };
-  
-exports.userBoard = (req, res) => {
-  res.status(200).send("User Content.");
-};
-
-exports.adminBoard = (req, res) => {
-  res.status(200).send("Admin Content.");
-};
-
-exports.moderatorBoard = (req, res) => {
-  res.status(200).send("Moderator Content.");
-};
-  
 const db = require("../models");
 
 const User = db.user;
 
+async function defineRoles(user) {
+  // console.log(user.roles);
+  return user.getRoles().then(roles => {
+      return {
+        ...user.dataValues,
+        roles: roles.map(role => role.name)
+      };
+    }
+  );
+  // return user;
+}
+
 exports.findAllUsers = (req, res) => {
-  User.findAll()
-    .then(data => {
-      console.log(data);
-      res.send(data);
+  User.findAll({include: 'roles'})
+    .then(users => {
+      return users.map(user => {
+        return defineRoles(user);
+      })
+    })
+    .then(users => {
+      res.json(users);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).send({
+        message:
+          err.message || "Some error occured while retrieving users"
+      });
+    });
+};
+
+exports.getUser = (req, res) => {
+  User.findOne({ where: { username: req.params.id }, include: 'roles' })
+    .then(user => {
+      return defineRoles(user);
+    })
+    .then(user => {
+      res.json(user);
     })
     .catch(err => {
       console.log(err);
@@ -34,9 +51,10 @@ exports.findAllUsers = (req, res) => {
 };
 
 exports.deleteUser = (req, res) => {
-  User.destroy({where: req.params.id})
-    .then(data => {
-      res.status(204).send();})
+  User.destroy({ where: { username: req.params.id } })
+    .then(_ => {
+      res.status(204).send();
+    })
     .catch(err => {
       res.status(500).send({
         message:
@@ -46,11 +64,12 @@ exports.deleteUser = (req, res) => {
 };
 
 exports.updateUser = (req, res) => {
-  User.update(req.body, {where: req.params.id})
+  User.update(req.body, { where: { username: req.params.id } })
     .then(_ => {
-      res.status(204).send();})
+      res.status(204).send();
+    })
     .catch(err => {
-      res.status(500).send({
+      res.status(500).json({
         message:
           err.message || "Some error occured while retrieving users"
       });

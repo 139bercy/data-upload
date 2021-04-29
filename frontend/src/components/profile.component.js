@@ -42,8 +42,8 @@ export default class Profile extends Component {
           {currentUser.accessToken.substr(currentUser.accessToken.length - 20)}
         </p>
         <p>
-          <strong>Id:</strong>{" "}
-          {currentUser.id}
+          <strong>Username:</strong>{" "}
+          {currentUser.username}
         </p>
         <p>
           <strong>Email:</strong>{" "}

@@ -1,21 +1,34 @@
 import axios from 'axios';
-
+import authHeader from './auth-header';
 
 export default function setupInterceptors(history) {
-  axios.interceptors.response.use(response => {
-    return response;
-  }, error => {
-    if (error.response) {
-      if (error.response.status === 401) {
-        var user = localStorage.getItem("user");
-        delete user.accessToken;
-        localStorage.setItem("user", user);
-        history.push('/login');
+    // Gestion de l'ajout du header d'authentification
+    axios.interceptors.request.use(request => {
+        if (request.url !== '/login' && request.url !== '/api/auth/signin') {
+            const authHeaders = authHeader()
+            console.log(request.url, authHeaders, Object.keys(authHeaders), Object.keys(authHeaders).length)
+            if (Object.keys(authHeaders).length === 0) {
+                history.push('/login');
+                return;
+            }
+            request.headers = {...request.headers, ...authHeaders};
+        }
+        return request;
+    })
+    // Gestion des erreurs en lien avec l'authentification
+    axios.interceptors.response.use(response => {
+        return response;
+    }, error => {
+      if (error.response) {
+        if (error.response.status === 401) {
+            localStorage.removeItem("user");
+            history.push('/login');
+        }
+        if (error.response.status === 403) {
+            console.log("Unauthorized");
+            alert("Vous n'avez pas les droits pour accéder à cette page");
+        }
       }
-      if (error.response.status === 403) {
-        console.log("Unauthorized");
-      }
-    }
-    return Promise.reject(error);
-  })
+        return Promise.reject(error);
+    })
 };

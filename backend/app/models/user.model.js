@@ -1,5 +1,7 @@
-module.exports = (sequelize, Sequelize) => {
-    const User = sequelize.define("users", {
+const Sequelize = require("sequelize");
+
+module.exports = (sequelize) => {
+  return sequelize.define("user", {
       username: {
         type: Sequelize.STRING,
         primaryKey: true
@@ -15,6 +17,4 @@ module.exports = (sequelize, Sequelize) => {
         defaultValue: true
       }
     });
-
-    return User;
   };

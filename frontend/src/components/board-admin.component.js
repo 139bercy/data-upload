@@ -43,8 +43,8 @@ const columns =
     {
       Header: "Supprimer",
       Cell: cell => (
-        <button onClick={handleDeleteClick(cell.row.values.username)}>
-          Delete
+        <button onClick={handleDeleteClick}>
+          Delete {/*(cell.row.values.username)*/}
         </button>
       )
     },

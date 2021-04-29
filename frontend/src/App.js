@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 import AuthService from "./services/auth.service";
+import UserService from "./services/user.service";
 
 import Login from "./components/login.component";
 import Home from "./components/home.component";
@@ -18,32 +19,35 @@ class App extends Component {
     this.logOut = this.logOut.bind(this);
 
     this.state = {
-      showModeratorBoard: false,
-      showAdminBoard: false,
+      isModerator: false,
+      isAdmin: false,
       currentUser: undefined,
       showEnvironnementBoard: true,
     };
   }
 
   componentDidMount() {
-    const user = AuthService.getCurrentUser();
-
-    if (user) {
-      this.setState({
-        currentUser: user,
-        showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
-        showAdminBoard: user.roles.includes("ROLE_ADMIN"),
-        showEnvironnementBoard: user.roles.includes("ROLE_ADMIN")
-      });
-    }
+    UserService.getUser(user ?? {username: 'notloggedin'})
+      .then((response) => {
+        this.setState({
+          currentUser: response.data,
+          isModerator: response.data.roles.includes("moderator"),
+          isAdmin: response.data.roles.includes("admin"),
+          showEnvironnementBoard: user.roles.includes("admin")
+        });
+      })
+      .catch(err => {
+        this.logOut();
+      })
   }
 
   logOut() {
     AuthService.logout();
+
   }
 
   render() {
-    const { currentUser, showModeratorBoard, showAdminBoard, showEnvironnementBoard } = this.state;
+    const { currentUser, isModerator, isAdmin, showEnvironnementBoard } = this.state;
 
     return (
       <div>
@@ -56,7 +60,7 @@ class App extends Component {
                 </Link>
               </li>
             )}
-            {showModeratorBoard && !showAdminBoard && (
+            {isModerator && !isAdmin && (
               <li className="nav-item">
                 <Link to={"/mod"} className="nav-link">
                   Gestion des utilisateurs
@@ -73,7 +77,8 @@ class App extends Component {
                 </Link>
               </li>
             )}
-            {showAdminBoard && (
+
+            {isAdmin && (
               <li className="nav-item">
                 <Link to={"/admin"} className="nav-link">
                   Administration des comptes

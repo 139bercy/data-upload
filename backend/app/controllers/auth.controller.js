@@ -1,12 +1,12 @@
+const Sequelize = require("sequelize");
+
 const db = require("../models");
 const config = require("../config/auth.config");
 const User = db.user;
 const Role = db.role;
 
-const Op = db.Sequelize.Op;
-
-var jwt = require("jsonwebtoken");
-var bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
   // Save User to Database
@@ -20,7 +20,7 @@ exports.signup = (req, res) => {
         Role.findAll({
           where: {
             name: {
-              [Op.or]: req.body.roles
+              [Sequelize.Op.or]: req.body.roles
             }
           }
         }).then(roles => {
@@ -51,7 +51,7 @@ exports.signin = (req, res) => {
         return res.status(404).send({ message: "User Not found." });
       }
 
-      var passwordIsValid = bcrypt.compareSync(
+      const passwordIsValid = bcrypt.compareSync(
         req.body.password,
         user.password
       );
@@ -63,17 +63,17 @@ exports.signin = (req, res) => {
         });
       }
 
-      var token = jwt.sign({ id: user.id }, config.secret, {
+      const token = jwt.sign({ id: user.username }, config.secret, {
         expiresIn: 86400 // 24 hours
       });
 
-      var authorities = [];
+      const authorities = [];
       user.getRoles().then(roles => {
         for (let i = 0; i < roles.length; i++) {
           authorities.push("ROLE_" + roles[i].name.toUpperCase());
         }
+        console.info(user.username + ' has logged in');
         res.status(200).send({
-          id: user.id,
           username: user.username,
           email: user.email,
           roles: authorities,
