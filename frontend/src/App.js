@@ -10,6 +10,7 @@ import Home from "./components/home.component";
 // import Env from "./components/env.component";
 import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
+import BoardEnvironnements from "./components/board-environnements"
 
 
 class App extends Component {
@@ -21,6 +22,7 @@ class App extends Component {
       showModeratorBoard: false,
       showAdminBoard: false,
       currentUser: undefined,
+      showEnvironnementBoard: true
     };
   }
 
@@ -32,6 +34,7 @@ class App extends Component {
         currentUser: user,
         showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
         showAdminBoard: user.roles.includes("ROLE_ADMIN"),
+        showEnvironnementBoard: user.roles.includes("ROLE_MODERATOR")
       });
     }
   }
@@ -41,7 +44,7 @@ class App extends Component {
   }
 
   render() {
-    const { currentUser, showModeratorBoard, showAdminBoard } = this.state;
+    const { currentUser, showModeratorBoard, showAdminBoard, showEnvironnementBoard } = this.state;
 
     return (
       <div>
@@ -65,6 +68,13 @@ class App extends Component {
 
           <div className="navbar-nav ml-auto">
 
+            {showEnvironnementBoard && (
+              <li className="nav-item">
+                <Link to={"/environnements"} className="nav-link">
+                  Gestion des environnements
+                </Link>
+              </li>
+            )}
             {showAdminBoard && (
                 <li className="nav-item">
                   <Link to={"/admin"} className="nav-link">
@@ -94,6 +104,7 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <Route path="/mod" component={BoardModerator} />
             <Route path="/admin" component={BoardAdmin} />
+            <Route path="/environnements" component={BoardEnvironnements} />
           </Switch>
         </div>
       </div>
