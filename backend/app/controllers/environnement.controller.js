@@ -15,3 +15,17 @@ exports.findAllEnvironnement = (req, res) => {
       });
     });
 };
+
+exports.deleteEnvironnement = (req, res) => {
+  console.log("rftgyhujiokpkjihuy");
+  User.destroy({ where: { name: req.params.id } })
+    .then(_ => {
+      res.status(204).send();
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occured while deleting env"
+      });
+    });
+};

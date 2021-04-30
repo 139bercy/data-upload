@@ -14,5 +14,17 @@ module.exports = function(app) {
      [authJwt.verifyToken, authJwt.isAdmin],
      controller.findAllEnvironnement
    );
+
+   app.delete(
+     "api/environnements/:id",
+     [authJwt.verifyToken, authJwt.isAdmin],
+     controller.deleteEnvironnement
+   );
+
+  app.put(
+    "/api/environnements/:id",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.updateEnvironnement
+  );
   });
 };

@@ -6,7 +6,8 @@ export default class BoardEnvironnements extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      content: []
+      content: [],
+      deleteEnv: []
     };
   }
 
@@ -29,23 +30,41 @@ export default class BoardEnvironnements extends Component {
       }
     );
   }
+
   deleteEnv = (id) => {
-    // TODO pop up confirm delete
-    //delete
-    console.log(id);
+    EnvironnementService.deleteEnv(id).then(
+      response => {
+        this.setState({
+          deleteEnv: response.data
+        });
+        console.log("delete done" + this.state.deleteEnv.data);
+      },
+      error => {
+        this.setState({
+            deleteEnv:
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString()
+        });
+        console.log("delete ERRROR" + this.state.deleteEnv.data);
+      }
+    );
+    console.log(this.state.deleteEnv);
   }
 
   ListEnv = () => {
     return (
       <div>
         {this.state.content.map((env) => (
-          <div class="container shadow-sm p-3 mb-5 bg-body rounded bg-light">
-          <div class="row justify-content-md-center">
-            <div class="col col-lg-2">
+          <div className="container shadow-sm p-3 mb-5 bg-body rounded bg-light">
+          <div className="row justify-content-md-center">
+            <div className="col col-lg-2">
               {env.name} 
             </div>
-            <div class="col col-lg-2">
-            <button id={env.name} type="button" class="btn btn-danger" onClick={() => { if (window.confirm('Voulez vous vraiment supprimer : ' + env.name)) this.deleteEnv(env.name)}} >Supprimer</button>
+            <div className="col col-lg-2">
+            <button id={env.name} type="button" className="btn btn-danger" onClick={() => { if (window.confirm('Voulez vous vraiment supprimer : ' + env.name)) this.deleteEnv(env.name)}} >Supprimer</button>
             </div>
           </div>
         </div>
@@ -57,12 +76,12 @@ export default class BoardEnvironnements extends Component {
   AddEnv = () => {
     return (
       <div>
-          <div class="container shadow-sm p-3 mb-5 bg-body rounded">
-          <h3 class="text-center">Ajout d'environnement</h3>
-          <div class="row justify-content-md-center">
-            <input type="text" class="col col-lg-2-auto form-control" id="newEnv" placeholder="nouveau environnement"></input>
-            <div class="col col-lg-2">
-            <button id="add-env" type="button" class="btn btn-success" onClick={() => this.deleteEnv("need to get data from placeholder")}>Ajouter</button>
+          <div className="container shadow-sm p-3 mb-5 bg-body rounded">
+          <h3 className="text-center">Ajout d'environnement</h3>
+          <div className="row justify-content-md-center">
+            <input type="text" className="col col-lg-2-auto form-control" id="newEnv" placeholder="nouveau environnement"></input>
+            <div className="col col-lg-2">
+            <button id="add-env" type="button" className="btn btn-success" onClick={() => this.deleteEnv("need to get data from placeholder")}>Ajouter</button>
             </div>
           </div>
         </div>
@@ -73,10 +92,10 @@ export default class BoardEnvironnements extends Component {
     return (
       <div className="container">
         <header className="jumbotron">
-          <h3 class="text-center">Gestion des environnements</h3>
+          <h3 className="text-center">Gestion des environnements</h3>
         </header>
         <this.AddEnv></this.AddEnv>
-        <h3 class="text-center">Environnement existants</h3>
+        <h3 className="text-center">Environnement existants</h3>
         <this.ListEnv></this.ListEnv>
       </div>
     );
