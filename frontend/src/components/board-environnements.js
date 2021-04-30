@@ -19,7 +19,7 @@ export default class BoardEnvironnements extends Component {
       },
       error => {
         this.setState({
-          content:
+            content:
             (error.response &&
               error.response.data &&
               error.response.data.message) ||
@@ -28,6 +28,11 @@ export default class BoardEnvironnements extends Component {
         });
       }
     );
+  }
+  deleteEnv = (id) => {
+    // TODO pop up confirm delete
+    //delete
+    console.log(id);
   }
 
   ListEnv = () => {
@@ -40,7 +45,7 @@ export default class BoardEnvironnements extends Component {
               {env.name} 
             </div>
             <div class="col col-lg-2">
-            <button id={env.name} type="button" class="btn btn-danger">Supprimer</button>
+            <button id={env.name} type="button" class="btn btn-danger" onClick={() => { if (window.confirm('Voulez vous vraiment supprimer : ' + env.name)) this.deleteEnv(env.name)}} >Supprimer</button>
             </div>
           </div>
         </div>
@@ -57,7 +62,7 @@ export default class BoardEnvironnements extends Component {
           <div class="row justify-content-md-center">
             <input type="text" class="col col-lg-2-auto form-control" id="newEnv" placeholder="nouveau environnement"></input>
             <div class="col col-lg-2">
-            <button id="add-env" type="button" class="btn btn-success">Ajouter</button>
+            <button id="add-env" type="button" class="btn btn-success" onClick={() => this.deleteEnv("need to get data from placeholder")}>Ajouter</button>
             </div>
           </div>
         </div>
