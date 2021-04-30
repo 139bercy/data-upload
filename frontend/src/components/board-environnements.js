@@ -53,7 +53,7 @@ export default class BoardEnvironnements extends Component {
     return (
       <div>
           <div class="container shadow-sm p-3 mb-5 bg-body rounded">
-          <h3>Ajout d'environnement</h3>
+          <h3 class="text-center">Ajout d'environnement</h3>
           <div class="row justify-content-md-center">
             <input type="text" class="col col-lg-2-auto form-control" id="newEnv" placeholder="nouveau environnement"></input>
             <div class="col col-lg-2">
@@ -68,10 +68,10 @@ export default class BoardEnvironnements extends Component {
     return (
       <div className="container">
         <header className="jumbotron">
-          <h3>Gestion des environnements</h3>
+          <h3 class="text-center">Gestion des environnements</h3>
         </header>
         <this.AddEnv></this.AddEnv>
-        <h3>environnement existants</h3>
+        <h3 class="text-center">Environnement existants</h3>
         <this.ListEnv></this.ListEnv>
       </div>
     );
