@@ -7,7 +7,7 @@ export default class BoardAdmin extends Component {
     super(props);
 
     this.state = {
-      content: []
+      content: ""
     };
   }
 
@@ -36,11 +36,6 @@ export default class BoardAdmin extends Component {
       <div className="container">
         <header className="jumbotron">
           <h3>Gestion des utilisateurs</h3>
-          <div>
-          {this.state.content.map((env, index) => (
-              <p>Hello, {env.name} !</p>
-          ))}
-          </div>
         </header>
       </div>
     );
