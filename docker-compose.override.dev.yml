@@ -42,12 +42,12 @@ services:
       PGPASSWORD: admin
       PORT: 8080
       SECRET: 'my-secret'
-      RESET: 'false'
+      RESET: ${RESET:-'false'}
       ADMIN_USERNAME: admin
       ADMIN_PASSWORD: admin
       ADMIN_EMAIL: admin@admin.admin
       FILE_STORAGE: /storage/
-    command: ./node_modules/nodemon/bin/nodemon.js /src/app/server.js
+    command: ./node_modules/nodemon/bin/nodemon.js -L /src/app/server.js
 
   frontend:
     image: frontend:dev
