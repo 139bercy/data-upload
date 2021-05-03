@@ -57,14 +57,6 @@ function roleOptionTemplate(cell) {
   )
 }
 
-function handleCreateClick(user) {
-  console.log(user);
-  const formElement = document.querySelector("form");
-  const form = new FormData(formElement);
-  // add fields to FormData
-  UserService.createUser(form);
-}
-
 const columns =
   [
     {
