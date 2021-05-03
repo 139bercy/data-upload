@@ -35,7 +35,7 @@ module.exports = function(app) {
   );
 
   app.post(
-    "/api/users/new",
+    "/api/users",
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.createUser
   )

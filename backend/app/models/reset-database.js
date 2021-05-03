@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 
-async function resetDatabase(User, Role) {
+async function resetDatabase(User, Role, Environnement) {
   Role.create({
     id: 1,
     name: "user"
@@ -16,10 +16,10 @@ async function resetDatabase(User, Role) {
     name: "admin"
   });
 
-  Envionnement.create({
+  Environnement.create({
     name: "plan-relance"
   });
-  Envionnement.create({
+  Environnement.create({
     name: "data-360"
   });
   if (typeof process.env['ADMIN_USERNAME'] == 'string' && typeof process.env['ADMIN_EMAIL'] == 'string' && typeof process.env['ADMIN_PASSWORD'] == 'string') {
@@ -38,11 +38,12 @@ async function resetDatabase(User, Role) {
 exports.reset = (sequelize) => {
   const Role = sequelize.model('role');
   const User = sequelize.model('user');
+  const environnement = sequelize.model('environnement');
 
 // force will drop the table if it already exists
   sequelize.sync({ force: true }).then(() => {
     console.log('Réinitialisation de la base de données');
-    return resetDatabase(User, Role);
+    return resetDatabase(User, Role, environnement);
   });
 };
 

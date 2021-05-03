@@ -27,13 +27,14 @@ class App extends Component {
   }
 
   componentDidMount() {
+    const user = AuthService.getCurrentUser();
+
     UserService.getUser(user ?? {username: 'notloggedin'})
       .then((response) => {
         this.setState({
           currentUser: response.data,
           isModerator: response.data.roles.includes("moderator"),
           isAdmin: response.data.roles.includes("admin"),
-          showEnvironnementBoard: user.roles.includes("admin")
         });
       })
       .catch(err => {
@@ -47,7 +48,7 @@ class App extends Component {
   }
 
   render() {
-    const { currentUser, isModerator, isAdmin, showEnvironnementBoard } = this.state;
+    const { currentUser, isModerator, isAdmin } = this.state;
 
     return (
       <div>
@@ -70,7 +71,8 @@ class App extends Component {
           </div>
 
           <div className="navbar-nav ml-auto">
-            {showEnvironnementBoard && (
+
+            {isAdmin && (
               <li className="nav-item">
                 <Link to={"/environnements"} className="nav-link">
                   Gestion des environnements

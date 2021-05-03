@@ -37,7 +37,7 @@ class UserService {
   }
 
   createUser(user) {
-    return axios.post(API_URL + '/new', user);
+    return axios.post(API_URL, user);
   }
 }
 
