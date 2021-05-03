@@ -7,7 +7,8 @@ export default class BoardEnvironnements extends Component {
     super(props);
     this.state = {
       content: [],
-      deleteEnv: []
+      deleteEnv: [],
+      inputValue: ""
     };
   }
 
@@ -100,15 +101,21 @@ export default class BoardEnvironnements extends Component {
     console.log(this.state.deleteEnv);
   }
 
+  updateInputValue = (evt) => {
+    this.setState({
+      inputValue: evt.target.value
+    });
+  }
+
   AddEnv = () => {
     return (
       <div>
           <div className="container shadow-sm p-3 mb-5 bg-body rounded">
           <h3 className="text-center">Ajout d'environnement</h3>
           <div className="row justify-content-md-center">
-            <input type="text" className="col col-lg-2-auto form-control" id="newEnv" placeholder="nouveau environnement"></input>
+            <input type="text" className="col col-lg-2-auto form-control" id="newEnv" placeholder="nouveau environnement" value={this.state.inputValue} onChange={this.updateInputValue}></input>
             <div className="col col-lg-2">
-            <button id="add-env" type="button" className="btn btn-success" onClick={() => this.createEnv("need to get data from placeholder")}>Ajouter</button>
+            <button id="add-env" type="button" className="btn btn-success" onClick={() => this.createEnv(this.state.inputValue)}>Ajouter</button>
             </div>
           </div>
         </div>
