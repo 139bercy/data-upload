@@ -74,3 +74,16 @@ exports.updateUser = (req, res) => {
       });
     });
 };
+
+exports.createUser = (req, res) => {
+  User.create(req.body, { where: { username: req.params.id } })
+    .then( _ => {
+      res.status(204).send();
+    })
+    .catch(err => {
+      res.status(500).json({
+        message:
+          err.message || "Some error occured while retrieving users"
+      });
+    });
+};
