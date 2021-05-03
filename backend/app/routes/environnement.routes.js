@@ -16,15 +16,14 @@ module.exports = function(app) {
    );
 
    app.delete(
-     "api/environnements/:id",
+     "/api/environnements/:id",
      [authJwt.verifyToken, authJwt.isAdmin],
      controller.deleteEnvironnement
    );
-
-  app.put(
-    "/api/environnements/:id",
-    [authJwt.verifyToken, authJwt.isAdmin],
-    controller.updateEnvironnement
-  );
+    app.post(
+      "/api/environnements",
+      [authJwt.verifyToken, authJwt.isAdmin],
+      controller.addEnvironnement
+    );
   });
 };

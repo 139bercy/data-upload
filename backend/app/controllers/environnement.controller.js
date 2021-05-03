@@ -5,7 +5,7 @@ const Env = db.environnement;
 exports.findAllEnvironnement = (req, res) => {
   Env.findAll()
     .then(data => {
-      res.send(data);
+      res.json(data);
     })
     .catch(err => {
       console.log(err);
@@ -18,9 +18,22 @@ exports.findAllEnvironnement = (req, res) => {
 
 exports.deleteEnvironnement = (req, res) => {
   console.log("rftgyhujiokpkjihuy");
-  User.destroy({ where: { name: req.params.id } })
+  Env.destroy({ where: { name: req.params.id } })
     .then(_ => {
       res.status(204).send();
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occured while deleting env"
+      });
+    });
+};
+
+exports.addEnvironnement = (req, res) => {
+  Env.create(req.body)
+    .then(data => {
+      res.json(data);
     })
     .catch(err => {
       res.status(500).send({

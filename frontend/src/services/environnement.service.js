@@ -9,10 +9,13 @@ class EnvService {
     return axios.get(API_URL, { headers: authHeader() });
   }
 
-  
   deleteEnv(env) {
-    console.log("env.service got : " + env);
-    return axios.delete(API_URL + '/' + env);
+    console.log("delete.env.service got : " + env);
+    return axios.delete(API_URL + '/' + env, { headers: authHeader() });
+  }
+  
+  createEnv(name) {
+    return axios.post(API_URL, {"name":name}, {headers: authHeader()});
   }
 }
 
