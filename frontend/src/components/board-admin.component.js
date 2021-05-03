@@ -59,7 +59,7 @@ function roleOptionTemplate(cell) {
 
 function handleCreateClick(user) {
   console.log(user);
-  form = new FormData();
+  const form = new FormData();
   // add fields to FormData
   UserService.createUser(form);
 }
