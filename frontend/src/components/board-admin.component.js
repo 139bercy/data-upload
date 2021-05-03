@@ -122,8 +122,18 @@ export default class BoardAdmin extends Component {
     super(props);
 
     this.state = {
-      users: []
+      users: [],
+      newUser: {
+        name: "",
+        mail: "",
+        usertype: "user"
+      }
     };
+
+    this.handleSubmit.bind(this);
+    this.updateMail.bind(this);
+    this.setUsertype.bind(this);
+    this.updateName.bind(this);
   }
 
   componentDidMount() {
@@ -148,10 +158,39 @@ export default class BoardAdmin extends Component {
     }
   }
 
+  updateName = (event) => {
+    this.setState({
+      newUser:
+        {
+          name: event.target.value
+        }
+    });
+  } 
+
+  updateMail = (event) => {
+    this.setState({
+      newUser: {
+        mail: event.target.value
+      }
+    });
+  }
+
+  setUsertype = (event) => {
+    this.setState({
+      newUser: {
+        usertype: event.target.value
+      }
+    })
+  }
+
+  handleSubmit = (event) => {
+    console.log(event, "NOT IMPLEMENTED")
+  }
+
   render() {
     return (
       <div className="container">
-        <form method="POST" action="">
+        <form onSubmit={this.handleSubmit}>
           <table>
             <thead>
               <tr>
@@ -162,19 +201,18 @@ export default class BoardAdmin extends Component {
             </thead>
             <tbody>
               <tr>
-                <td><input placeholder="Nom" required/></td>
-                <td><input placeholder="example@placeholder.co" required/></td>
+                <td><input value={this.state.newUser.name} onChange={this.updateName} required/></td>
+                <td><input value={this.state.newUser.mail} onChange={this.updateMail} required/></td>
                 <td>
-                  <input type="radio" id="user" name="usertype" value="user" defaultChecked/>
+                  <input type="radio" id="user" name="usertype" value="user" onChange={this.setUsertype} checked={this.state.newUser.usertype === "user"}/>
                   <label htmlFor="user">Utilisateur</label>
-                  <input type="radio" id="mod" name="usertype" value="mod"/>
+                  <input type="radio" id="mod" name="usertype" value="mod" onChange={this.setUsertype} checked={this.state.newUser.usertype === "mod"}/>
                   <label htmlFor="mod">Modérateur</label>
-                  <input type="radio" id="admin" name="usertype" value="admin"/>
+                  <input type="radio" id="admin" name="usertype" value="admin" onChange={this.setUsertype} checked={this.state.newUser.usertype === "admin"}/>
                   <label htmlFor="admin">Administrateur</label>
                 </td>
                 <td>
-                  <button onClick={handleCreateClick} type="button">Créer</button>
-                  <button hidden></button>
+                  <button>Créer</button>
                 </td>
               </tr>
             </tbody>
