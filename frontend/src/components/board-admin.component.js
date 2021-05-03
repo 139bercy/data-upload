@@ -57,6 +57,10 @@ function roleOptionTemplate(cell) {
   )
 }
 
+function handleCreateClick(user) {
+  console.log(user);
+}
+
 const columns =
   [
     {
@@ -143,6 +147,30 @@ export default class BoardAdmin extends Component {
   render() {
     return (
       <div className="container">
+        <table>
+          <thead>
+            <tr>
+              <th>Nom d'Utilisateur</th>
+              <th>Adresse Email</th>
+              <th>Roles</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+                <td><input placeholder="Nom" required/></td>
+                <td><input placeholder="example@placeholder.co" required/></td>
+                <td>
+                  <input type="radio" id="user" name="usertype" value="user" checked/>
+                  <label for="user">Utilisateur</label>
+                  <input type="radio" id="mod" name="usertype" value="mod"/>
+                  <label for="mod">Modérateur</label>
+                  <input type="radio" id="admin" name="usertype" value="admin"/>
+                  <label for="admin">Administrateur</label>
+                </td>
+                <td><button onClick={handleCreateClick}>Créer</button></td>
+            </tr>
+          </tbody>
+        </table>
         <Table columns={columns} data={this.state.users}></Table>
       </div>
     );
