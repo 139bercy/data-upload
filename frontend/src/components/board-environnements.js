@@ -7,7 +7,6 @@ export default class BoardEnvironnements extends Component {
     super(props);
     this.state = {
       content: [],
-      deleteEnv: [],
       inputValue: ""
     };
   }
@@ -36,36 +35,25 @@ export default class BoardEnvironnements extends Component {
     EnvironnementService.deleteEnv(id).then(
       response => {
         this.setState({
-          deleteEnv: response.data,     
           content : this.state.content.filter(environnement => {
             return environnement.name !== id;
           })
         });
-        console.log("delete done" + this.state.deleteEnv.data);
       },
       error => {
-        this.setState({
-            deleteEnv:
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString()
-        });
-        console.log("delete ERRROR" + this.state.deleteEnv.data);
+        console.log("delete ERRROR" + error);
       }
     );
-    console.log(this.state.deleteEnv);
   }
 
   ListEnv = () => {
     return (
       <div>
         {this.state.content.map((env) => (
-          <div className="container shadow-sm p-3 mb-5 bg-body rounded bg-light">
+          <div key={env.name} className="container shadow-sm p-3 mb-5 bg-body rounded bg-light">
           <div className="row justify-content-md-center">
             <div className="col col-lg-2">
-              {env.name} 
+              {env.name}
             </div>
             <div className="col col-lg-2">
             <button id={env.name} type="button" className="btn btn-danger" onClick={() => { if (window.confirm('Voulez vous vraiment supprimer : ' + env.name)) this.deleteEnv(env.name)}} >Supprimer</button>
@@ -84,21 +72,11 @@ export default class BoardEnvironnements extends Component {
         this.setState({
           content : this.state.content
         });
-        console.log("delete done" + this.state.deleteEnv.data);
       },
       error => {
-        this.setState({
-            deleteEnv:
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString()
-        });
-        console.log("delete ERRROR" + this.state.deleteEnv.data);
+        console.log("Add ERRROR" + error);
       }
     );
-    console.log(this.state.deleteEnv);
   }
 
   updateInputValue = (evt) => {

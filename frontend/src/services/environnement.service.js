@@ -10,7 +10,6 @@ class EnvService {
   }
 
   deleteEnv(env) {
-    console.log("delete.env.service got : " + env);
     return axios.delete(API_URL + '/' + env, { headers: authHeader() });
   }
   
