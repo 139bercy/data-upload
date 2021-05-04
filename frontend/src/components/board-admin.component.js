@@ -132,9 +132,10 @@ export default class BoardAdmin extends Component {
     if (this.state.users.length === 0) {
       UserService.getUsers().then(
         response => {
-          this.setState({
+          this.setState((prevState) => ({
+            newUser: prevState.newUser,
             users: response.data
-          });
+          }))
         },
         error => {
           this.setState({
@@ -151,28 +152,34 @@ export default class BoardAdmin extends Component {
   }
 
   updateName = (event) => {
-    this.setState({
+    const { value } = event.target;
+    this.setState((prevState) => ({
       newUser:
         {
-          name: event.target.value
+          ...prevState.newUser,
+          name: value
         }
-    });
-  } 
+    }));
+  }
 
   updateMail = (event) => {
-    this.setState({
+    const { value } = event.target;
+    this.setState((prevState) => ({
       newUser: {
-        mail: event.target.value
+        ...prevState.newUser,
+        mail: value
       }
-    });
+    }));
   }
 
   setUsertype = (event) => {
-    this.setState({
+    const { value } = event.target;
+    this.setState((prevState) => ({
       newUser: {
-        usertype: event.target.value
+        ...prevState.newUser,
+        usertype: value
       }
-    })
+    }));
   }
 
   handleSubmit = (event) => {
@@ -193,14 +200,14 @@ export default class BoardAdmin extends Component {
             </thead>
             <tbody>
               <tr>
-                <td><input value={this.state.newUser.name} onChange={this.updateName} required/></td>
-                <td><input value={this.state.newUser.mail} onChange={this.updateMail} required/></td>
+                <td><input id="name" value={this.state.newUser.name} onChange={this.updateName} required/></td>
+                <td><input id="mail" value={this.state.newUser.mail} onChange={this.updateMail} type="email" required/></td>
                 <td>
-                  <input type="radio" id="user" name="usertype" value="user" onChange={this.setUsertype} checked={this.state.newUser.usertype === "user"}/>
+                  <input type="radio" name="usertype" value="user" onChange={this.setUsertype} checked={this.state.newUser.usertype === "user"}/>
                   <label htmlFor="user">Utilisateur</label>
-                  <input type="radio" id="mod" name="usertype" value="mod" onChange={this.setUsertype} checked={this.state.newUser.usertype === "mod"}/>
+                  <input type="radio" name="usertype" value="mod" onChange={this.setUsertype} checked={this.state.newUser.usertype === "mod"}/>
                   <label htmlFor="mod">Modérateur</label>
-                  <input type="radio" id="admin" name="usertype" value="admin" onChange={this.setUsertype} checked={this.state.newUser.usertype === "admin"}/>
+                  <input type="radio" name="usertype" value="admin" onChange={this.setUsertype} checked={this.state.newUser.usertype === "admin"}/>
                   <label htmlFor="admin">Administrateur</label>
                 </td>
                 <td>
