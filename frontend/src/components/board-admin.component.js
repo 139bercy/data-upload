@@ -116,8 +116,8 @@ export default class BoardAdmin extends Component {
     this.state = {
       users: [],
       newUser: {
-        name: "",
-        mail: "",
+        username: "",
+        email: "",
         usertype: "user"
       }
     };
@@ -125,7 +125,7 @@ export default class BoardAdmin extends Component {
     this.handleSubmit.bind(this);
     this.updateMail.bind(this);
     this.setUsertype.bind(this);
-    this.updateName.bind(this);
+    this.updateUsername.bind(this);
   }
 
   componentDidMount() {
@@ -151,13 +151,13 @@ export default class BoardAdmin extends Component {
     }
   }
 
-  updateName = (event) => {
+  updateUsername = (event) => {
     const { value } = event.target;
     this.setState((prevState) => ({
       newUser:
         {
           ...prevState.newUser,
-          name: value
+          username: value
         }
     }));
   }
@@ -167,7 +167,7 @@ export default class BoardAdmin extends Component {
     this.setState((prevState) => ({
       newUser: {
         ...prevState.newUser,
-        mail: value
+        email: value
       }
     }));
   }
@@ -183,12 +183,13 @@ export default class BoardAdmin extends Component {
   }
 
   handleSubmit = (event) => {
-    console.log(event, "NOT IMPLEMENTED")
+    event.preventDefault();
+    return UserService.createUser(this.state.newUser);
   }
 
   render() {
     return (
-      <div className="container">
+      <div classuserName="container">
         <form onSubmit={this.handleSubmit}>
           <table>
             <thead>
@@ -200,14 +201,14 @@ export default class BoardAdmin extends Component {
             </thead>
             <tbody>
               <tr>
-                <td><input id="name" value={this.state.newUser.name} onChange={this.updateName} required/></td>
-                <td><input id="mail" value={this.state.newUser.mail} onChange={this.updateMail} type="email" required/></td>
+                <td><input id="username" value={this.state.newUser.username} onChange={this.updateUsername} required/></td>
+                <td><input id="email" value={this.state.newUser.email} onChange={this.updateMail} type="email" required/></td>
                 <td>
-                  <input type="radio" name="usertype" value="user" onChange={this.setUsertype} checked={this.state.newUser.usertype === "user"}/>
+                  <input type="radio" username="usertype" value="user" onChange={this.setUsertype} checked={this.state.newUser.usertype === "user"}/>
                   <label htmlFor="user">Utilisateur</label>
-                  <input type="radio" name="usertype" value="mod" onChange={this.setUsertype} checked={this.state.newUser.usertype === "mod"}/>
+                  <input type="radio" username="usertype" value="mod" onChange={this.setUsertype} checked={this.state.newUser.usertype === "mod"}/>
                   <label htmlFor="mod">Modérateur</label>
-                  <input type="radio" name="usertype" value="admin" onChange={this.setUsertype} checked={this.state.newUser.usertype === "admin"}/>
+                  <input type="radio" username="usertype" value="admin" onChange={this.setUsertype} checked={this.state.newUser.usertype === "admin"}/>
                   <label htmlFor="admin">Administrateur</label>
                 </td>
                 <td>
