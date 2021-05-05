@@ -118,7 +118,7 @@ export default class BoardAdmin extends Component {
       newUser: {
         username: "",
         email: "",
-        usertype: "user"
+        usertype: 1
       }
     };
 
@@ -177,7 +177,7 @@ export default class BoardAdmin extends Component {
     this.setState((prevState) => ({
       newUser: {
         ...prevState.newUser,
-        usertype: value
+        usertype: Number(value)
       }
     }));
   }
@@ -204,11 +204,11 @@ export default class BoardAdmin extends Component {
                 <td><input id="username" value={this.state.newUser.username} onChange={this.updateUsername} required/></td>
                 <td><input id="email" value={this.state.newUser.email} onChange={this.updateMail} type="email" required/></td>
                 <td>
-                  <input type="radio" username="usertype" value="user" onChange={this.setUsertype} checked={this.state.newUser.usertype === "user"}/>
+                  <input type="radio" username="usertype" value={1} onChange={this.setUsertype} checked={this.state.newUser.usertype === 1}/>
                   <label htmlFor="user">Utilisateur</label>
-                  <input type="radio" username="usertype" value="mod" onChange={this.setUsertype} checked={this.state.newUser.usertype === "mod"}/>
+                  <input type="radio" username="usertype" value={2} onChange={this.setUsertype} checked={this.state.newUser.usertype === 2}/>
                   <label htmlFor="mod">Modérateur</label>
-                  <input type="radio" username="usertype" value="admin" onChange={this.setUsertype} checked={this.state.newUser.usertype === "admin"}/>
+                  <input type="radio" username="usertype" value={3} onChange={this.setUsertype} checked={this.state.newUser.usertype === 3}/>
                   <label htmlFor="admin">Administrateur</label>
                 </td>
                 <td>
