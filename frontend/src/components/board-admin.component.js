@@ -132,19 +132,18 @@ export default class BoardAdmin extends Component {
     if (this.state.users.length === 0) {
       UserService.getUsers().then(
         response => {
-          this.setState((prevState) => ({
-            newUser: prevState.newUser,
+          this.setState(() => ({
             users: response.data
           }))
         },
         error => {
           this.setState({
-            content:
-              (error.response &&
+            content: (
+                error.response &&
                 error.response.data &&
                 error.response.data.message) ||
-              error.message ||
-              error.toString()
+                error.message ||
+                error.toString()
           });
         }
       );
@@ -189,7 +188,7 @@ export default class BoardAdmin extends Component {
 
   render() {
     return (
-      <div classuserName="container">
+      <div className="container">
         <form onSubmit={this.handleSubmit}>
           <table>
             <thead>
