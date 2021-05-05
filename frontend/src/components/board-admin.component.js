@@ -3,13 +3,6 @@ import React, { Component } from "react";
 import UserService from "../services/user.service";
 import Table from "./table-component";
 
-function handleDeleteClick(user) {
-  return () => {
-    console.log("Trying to delete :", user);
-    return UserService.deleteUser(user);
-  }
-}
-
 function onEnableUserChange(user) {
   return () => {
     user.enable = !user.enable;
@@ -57,7 +50,26 @@ function roleOptionTemplate(cell) {
   )
 }
 
-const columns =
+export default class BoardAdmin extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      users: [],
+      newUser: {
+        username: "",
+        email: "",
+        usertype: 1
+      }
+    };
+
+    this.handleSubmit.bind(this);
+    this.updateMail.bind(this);
+    this.setUsertype.bind(this);
+    this.updateUsername.bind(this);
+  }
+
+  columns =
   [
     {
       Header: "Nom d'utilisateur",
@@ -93,8 +105,8 @@ const columns =
     },
     {
       Header: "Supprimer",
-      Cell: cell => (
-        <button onClick={handleDeleteClick(cell.row.values)}>
+      Cell: (cell) => (
+        <button onClick={this.handleDeleteClick(cell.row.values)}>
           Delete
         </button>
       )
@@ -108,25 +120,6 @@ const columns =
       )
     }*/
   ];
-
-export default class BoardAdmin extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      users: [],
-      newUser: {
-        username: "",
-        email: "",
-        usertype: 1
-      }
-    };
-
-    this.handleSubmit.bind(this);
-    this.updateMail.bind(this);
-    this.setUsertype.bind(this);
-    this.updateUsername.bind(this);
-  }
 
   componentDidMount() {
     if (this.state.users.length === 0) {
@@ -185,6 +178,15 @@ export default class BoardAdmin extends Component {
     );
   }
 
+  handleDeleteClick(user) {
+    return () => {
+      console.log("Trying to delete :", user);
+      const ret = UserService.deleteUser(user);
+      this.refreshUserList();
+      return ret;
+    }
+  }
+
   render() {
     return (
       <div className="container">
@@ -216,7 +218,7 @@ export default class BoardAdmin extends Component {
             </tbody>
           </table>
         </form>
-        <Table columns={columns} data={this.state.users}></Table>
+        <Table columns={this.columns} data={this.state.users} deleteUser={this.handleDeleteClick}></Table>
       </div>
     );
   }
