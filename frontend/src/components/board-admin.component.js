@@ -176,7 +176,18 @@ export default class BoardAdmin extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    return UserService.createUser(this.state.newUser);
+    const ret = UserService.createUser(this.state.newUser);
+    UserService.getUsers().then(
+      response => {
+        this.setState(() => ({
+          users: response.data
+        }))
+      },
+      error => {
+        console.log(error);
+      }
+    );
+    return ret;
   }
 
   render() {
