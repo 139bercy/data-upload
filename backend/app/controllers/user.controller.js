@@ -76,8 +76,10 @@ exports.updateUser = (req, res) => {
 };
 
 exports.createUser = (req, res) => {
+  userRoles = Array.from({length: req.body.usertype}, (x, i) => i+1);
   User.create(req.body, { where: { username: req.params.id } })
-    .then( _ => {
+    .then(user => user.setRoles(userRoles))
+    .then(_ => {
       res.status(204).send();
     })
     .catch(err => {
