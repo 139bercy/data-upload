@@ -130,16 +130,7 @@ export default class BoardAdmin extends Component {
 
   componentDidMount() {
     if (this.state.users.length === 0) {
-      UserService.getUsers().then(
-        response => {
-          this.setState(() => ({
-            users: response.data
-          }))
-        },
-        error => {
-          console.log(error);
-        }
-      );
+      this.refreshUserList();
     }
   }
 
@@ -177,6 +168,11 @@ export default class BoardAdmin extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     const ret = UserService.createUser(this.state.newUser);
+    this.refreshUserList();
+    return ret;
+  }
+
+  refreshUserList() {
     UserService.getUsers().then(
       response => {
         this.setState(() => ({
@@ -187,7 +183,6 @@ export default class BoardAdmin extends Component {
         console.log(error);
       }
     );
-    return ret;
   }
 
   render() {
