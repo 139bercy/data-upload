@@ -190,6 +190,9 @@ export default class BoardAdmin extends Component {
   render() {
     return (
       <div className="container">
+        <header className="jumbotron">
+          <h3 className="text-center">Gestion des utilisateurs</h3>
+        </header>
         <form onSubmit={this.handleSubmit}>
           <table>
             <thead>
