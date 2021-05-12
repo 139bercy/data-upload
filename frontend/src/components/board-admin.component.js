@@ -43,6 +43,15 @@ function defineRoles(role) {
   return roles;
 }
 
+function roleOptionTemplate(cell) {
+  console.log(cell.row.values.roles);
+  let str = cell.row.values.roles.toString();
+  console.log(str);
+  return (
+    <p>{str}</p>
+  )
+}
+
 export default class BoardAdmin extends Component {
   constructor(props) {
     super(props);
