@@ -43,13 +43,6 @@ function defineRoles(role) {
   return roles;
 }
 
-function roleOptionTemplate(cell) {
-  return cell.row.values.roles.map(role => (
-      <option key={role} value={role}>{role}</option>
-    )
-  )
-}
-
 export default class BoardAdmin extends Component {
   constructor(props) {
     super(props);
@@ -84,9 +77,7 @@ export default class BoardAdmin extends Component {
       accessor: 'roles',
       Cell: cell => (
         <div>
-          <select onChange={onRolesUserChange(cell.row.values)} defaultValue={selectRole(cell.row.values.roles)}>
             {roleOptionTemplate(cell)}
-          </select>
         </div>
       )
     },
@@ -193,8 +184,8 @@ export default class BoardAdmin extends Component {
         <header className="jumbotron">
           <h3 className="text-center">Gestion des utilisateurs</h3>
         </header>
-        <form onSubmit={this.handleSubmit}>
-          <table>
+        <form className="col-auto" onSubmit={this.handleSubmit}>
+          <table className="table table-bordered table-striped text-center">
             <thead>
               <tr>
                 <th>Nom d'Utilisateur</th>
@@ -215,7 +206,7 @@ export default class BoardAdmin extends Component {
                   <label htmlFor="admin">Administrateur</label>
                 </td>
                 <td>
-                  <button>Créer</button>
+                  <button className="btn btn-success">Créer</button>
                 </td>
               </tr>
             </tbody>

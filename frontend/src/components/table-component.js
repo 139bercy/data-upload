@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, isValidElement } from "react";
 import { useTable, useGlobalFilter, useSortBy } from "react-table";
 
 export default function Table({ columns, data }) {
@@ -34,12 +34,15 @@ export default function Table({ columns, data }) {
 
     return (
     <>
-        <input
-        value={filterInput}
-        onChange={handleFilterChange}
-        placeholder={"Search..."}
-        />
-        <table {...getTableProps()}>
+        <div className="input-group mb-3">
+            <input
+            className="form-control"
+            value={filterInput}
+            onChange={handleFilterChange}
+            placeholder={"Rechercher..."}
+            />
+        </div>
+        <table className="table table-bordered table-striped text-center" {...getTableProps()}>
         <thead>
             {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -63,6 +66,7 @@ export default function Table({ columns, data }) {
         <tbody {...getTableBodyProps()}>
             {rows.map((row, i) => {
             prepareRow(row);
+
             return (
                 <tr {...row.getRowProps()}>
                 {row.cells.map(cell => {
