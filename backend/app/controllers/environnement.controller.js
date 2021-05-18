@@ -31,6 +31,12 @@ exports.deleteEnvironnement = (req, res) => {
 };
 
 exports.addEnvironnement = (req, res) => {
+  if (!req.body.name) {
+    res.status(400).send({
+      message: "L'environnement doit avoir un nom !"
+    });
+    return ;
+  }
   Env.create(req.body)
     .then(data => {
       res.json(data);

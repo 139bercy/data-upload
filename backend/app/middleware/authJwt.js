@@ -19,7 +19,20 @@ verifyToken = (req, res, next) => {
       });
     }
     req.username = decoded.id;
-    next();
+    isUser(req,res,next);
+  });
+};
+
+isUser = (req, res, next) => {
+  User.findByPk(req.username).then(user => {
+    if (user) {
+      next();
+      return;
+    }
+
+    res.status(401).send({
+      message: "L'utilisateur n'existe pas ou vous n'êtes pas connecté !"
+    });
   });
 };
 
@@ -83,6 +96,7 @@ const authJwt = {
   verifyToken: verifyToken,
   isAdmin: isAdmin,
   isModerator: isModerator,
-  isModeratorOrAdmin: isModeratorOrAdmin
+  isModeratorOrAdmin: isModeratorOrAdmin,
+  isUser: isUser,
 };
 module.exports = authJwt;

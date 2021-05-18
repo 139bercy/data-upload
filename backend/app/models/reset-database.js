@@ -29,7 +29,7 @@ async function resetDatabase(User, Role, Environnement) {
       username: process.env['ADMIN_USERNAME'],
       email: process.env['ADMIN_EMAIL'],
       password: bcrypt.hashSync(process.env['ADMIN_PASSWORD'], 8),
-    }).then(user => user.setRoles([1, 2, 3]))
+    }).then(user => user.setRoles(["user", "moderator", "admin"]))
   } else {
     console.log('Vous devez spécifier en variable d\'environnement, les variables suivantes : ADMIN_USERNAME, ADMIN_PASSWORD, ADMIN_EMAIL');
   }

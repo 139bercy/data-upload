@@ -30,7 +30,7 @@ exports.signup = (req, res) => {
         });
       } else {
         // user role = 1
-        user.setRoles([1]).then(() => {
+        user.setRoles(['user']).then(() => {
           res.send({ message: "User was registered successfully!" });
         });
       }
@@ -48,7 +48,10 @@ exports.signin = (req, res) => {
   })
     .then(user => {
       if (!user) {
-        return res.status(404).send({ message: "User Not found." });
+        return res.status(404).send({ message: "L'utilisateur n'existe pas." });
+      }
+      if (!user.enable) {
+        return res.status(403).send({ message: "Votre compte n'est pas actif." });
       }
 
       const passwordIsValid = bcrypt.compareSync(
@@ -59,7 +62,7 @@ exports.signin = (req, res) => {
       if (!passwordIsValid) {
         return res.status(401).send({
           accessToken: null,
-          message: "Invalid Password!"
+          message: "Mot de passe incorrect !"
         });
       }
 

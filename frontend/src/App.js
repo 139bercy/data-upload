@@ -8,7 +8,6 @@ import UserService from "./services/user.service";
 
 import Login from "./components/login.component";
 import Home from "./components/home.component";
-import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
 import BoardEnvironnementsComponent from "./components/board.environnements.component"
 
@@ -52,7 +51,7 @@ class App extends Component {
 
     return (
       <div>
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
+        <nav id="top" className="navbar navbar-expand navbar-dark bg-dark">
           <div className="navbar-nav mr-auto">
             {currentUser && (
               <li className="nav-item">
@@ -80,7 +79,7 @@ class App extends Component {
               </li>
             )}
 
-            {isAdmin && (
+            {(isModerator || isAdmin) && (
               <li className="nav-item">
                 <Link to={"/admin"} className="nav-link">
                   Administration des comptes
@@ -103,11 +102,10 @@ class App extends Component {
           </div>
         </nav>
 
-        <div className="container mt-3">
+        <div className="container mt-5">
           <Switch>
             <Route exact path={["/", "/upload"]} component={Home} />
             <Route exact path="/login" component={Login} />
-            <Route path="/mod" component={BoardModerator} />
             <Route path="/admin" component={BoardAdmin} />
             <Route path="/environnements" component={BoardEnvironnementsComponent} />
           </Switch>

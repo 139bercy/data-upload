@@ -50,6 +50,13 @@ exports.getUser = (req, res) => {
 };
 
 exports.deleteUser = (req, res) => {
+  console.log(req.username, req.params.id, req.param.username);
+  if (req.params.id === req.username) {
+    res.status(400).send({
+      message: "Vous ne pouvez pas vous supprimer vous même !"
+    });
+    return;
+  }
   User.destroy({ where: { username: req.params.id } })
     .then(_ => {
       res.status(204).send();
@@ -76,9 +83,8 @@ exports.updateUser = (req, res) => {
 };
 
 exports.createUser = (req, res) => {
-  userRoles = Array.from({length: req.body.usertype}, (x, i) => i+1);
-  User.create(req.body, { where: { username: req.params.id } })
-    .then(user => user.setRoles(userRoles))
+  User.create(req.body)
+    .then(user => user.setRoles(req.body.roles))
     .then(_ => {
       res.status(204).send();
     })
