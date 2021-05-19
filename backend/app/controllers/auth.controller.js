@@ -17,25 +17,23 @@ exports.signup = (req, res) => {
   })
     .then(user => {
       if (req.body.roles) {
-        Role.findAll({
+        return Role.findAll({
           where: {
             name: {
               [Sequelize.Op.or]: req.body.roles
             }
           }
-        }).then(roles => {
-          user.setRoles(roles).then(() => {
-            res.send({ message: "User was registered successfully!" });
-          });
-        });
+        }).then(roles => user.setRoles(roles))
       } else {
         // user role = 1
-        user.setRoles(['user']).then(() => {
-          res.send({ message: "User was registered successfully!" });
-        });
+        return user.setRoles(['user'])
       }
     })
+    .then(user => {
+      res.send({ message: "User was registered successfully!" });
+    })
     .catch(err => {
+      console.error(err);
       res.status(500).send({ message: err.message });
     });
 };
@@ -44,7 +42,8 @@ exports.signin = (req, res) => {
   User.findOne({
     where: {
       username: req.body.username
-    }
+    },
+    include: 'roles'
   })
     .then(user => {
       if (!user) {
@@ -66,25 +65,28 @@ exports.signin = (req, res) => {
         });
       }
 
-      const token = jwt.sign({ id: user.username }, config.secret, {
-        expiresIn: 86400 // 24 hours
-      });
+      return user
+    })
+    .then(user => {
 
-      const authorities = [];
-      user.getRoles().then(roles => {
-        for (let i = 0; i < roles.length; i++) {
-          authorities.push("ROLE_" + roles[i].name.toUpperCase());
+        const authorities = [];
+        for (let i = 0; i < user.roles.length; i++) {
+          authorities.push(user.roles[i].name);
+
         }
-        console.info(user.username + ' has logged in');
+        const token = jwt.sign({ username: user.username, roles: authorities }, config.secret, {
+          expiresIn: 86400 // 24 hours
+        });
+        console.info(user.username + ' has logged in with roles ', authorities);
         res.status(200).send({
           username: user.username,
           email: user.email,
           roles: authorities,
           accessToken: token
         });
-      });
-    })
+      })
     .catch(err => {
+      console.log(err);
       res.status(500).send({ message: err.message });
     });
 };

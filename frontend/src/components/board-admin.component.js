@@ -4,51 +4,68 @@ import UserService from "../services/user.service";
 import Table from "./table-component";
 
 
-const roles = ['user', 'moderator', 'admin'];
-const rolesTrad = { 'user': 'Utilisateur', 'moderator': 'Modérateur', 'admin': 'Administrateur'};
+const rolesList = { user: 'user', moderator: 'moderator', admin: 'admin' };
+const rolesTrad = { 'user': 'Utilisateur', 'moderator': 'Modérateur', 'admin': 'Administrateur' };
 
 function onEnableUserChange(user) {
   return () => {
+    const oldEnable = user.enable;
     user.enable = !user.enable;
-    return UserService.updateUser(user);
+    return UserService.updateUser(user)
+      .catch(error => {
+        console.log(error);
+        alert(error.response.data.message);
+        user.enable = oldEnable;
+      });
   }
 }
 
 function onRolesUserChange(user) {
   return (event) => {
+    const oldRoles = user.roles;
     user.roles = defineRoles(event.target.value);
-    return UserService.updateUser(user);
+    return UserService.updateUser(user)
+      .catch(error => {
+        console.log(error);
+        alert(error.response.data.message);
+        user.roles = selectRole(oldRoles);
+      });
   }
 }
 
 function selectRole(roles) {
-  if (roles.indexOf('admin') !== -1) {
-    return 'admin';
+  console.log(roles);
+  if (roles.includes(rolesList.admin)) {
+    return rolesList.admin;
   }
-  if (roles.indexOf('moderator') !== -1) {
-    return 'moderator';
+  if (roles.includes(rolesList.moderator)) {
+    return rolesList.moderator;
   }
-  if (roles.indexOf('user') !== -1) {
-    return 'user';
+  if (roles.includes(rolesList.user)) {
+    return rolesList.user;
   }
 }
 
 function defineRoles(role) {
+  console.log(role);
   let roles = [];
-  if (role === 'admin') {
-    roles.push('admin');
+  if (role === rolesList.admin) {
+    console.log(rolesList.admin + ' included');
+    roles.push(rolesList.admin);
   }
-  if (role === 'moderator' || role === 'admin') {
-    roles.push('moderator');
+  if (role === rolesList.moderator || role === rolesList.admin) {
+    console.log(rolesList.moderator + ' included');
+    roles.push(rolesList.moderator);
   }
-  if (role === 'user' || role === 'moderator' || role === 'admin') {
-    roles.push('user');
+  if (role === rolesList.user || role === rolesList.moderator || role === rolesList.admin) {
+    console.log(rolesList.user + ' included');
+    roles.push(rolesList.user);
   }
   return roles;
 }
 
 function roleOptionTemplate(cell) {
-  return roles.map(role => (
+  return Object.values(rolesList).map(role => (
       <option key={role} value={role}>{rolesTrad[role]}</option>
     )
   )
@@ -63,14 +80,14 @@ export default class BoardAdmin extends Component {
       newUser: {
         username: "",
         email: "",
-        roles: 'user'
+        roles: [rolesList.user]
       }
     };
 
     this.handleSubmit.bind(this);
-    this.updateMail.bind(this);
+    this.defineMail.bind(this);
     this.setRoles.bind(this);
-    this.updateUsername.bind(this);
+    this.defineUsername.bind(this);
   }
 
   columns =
@@ -131,7 +148,7 @@ export default class BoardAdmin extends Component {
     }
   }
 
-  updateUsername = (event) => {
+  defineUsername = (event) => {
     const { value } = event.target;
     this.setState((prevState) => ({
       newUser:
@@ -142,7 +159,7 @@ export default class BoardAdmin extends Component {
     }));
   }
 
-  updateMail = (event) => {
+  defineMail = (event) => {
     const { value } = event.target;
     this.setState((prevState) => ({
       newUser: {
@@ -154,10 +171,13 @@ export default class BoardAdmin extends Component {
 
   setRoles = (event) => {
     const { value } = event.target;
+
+    const roles = defineRoles(value);
+    console.log(roles);
     this.setState((prevState) => ({
       newUser: {
         ...prevState.newUser,
-        roles: defineRoles(value)
+        roles: roles
       }
     }));
   }
@@ -169,13 +189,16 @@ export default class BoardAdmin extends Component {
           this.refreshUserList();
         }
       ).catch(error => {
-        console.log(error.response.data.message);
-        alert(error.response.data.message);
+          console.log(error.response.data.message);
+          alert(error.response.data.message);
         }
       );
   }
 
   refreshUserList() {
+    this.setState(() => ({
+      users: []
+    }))
     UserService.getUsers().then(
       response => {
         this.setState(() => ({
@@ -191,16 +214,16 @@ export default class BoardAdmin extends Component {
   }
 
   deleteUser(user) {
-      UserService.deleteUser(user).then(
-        response => {
-          this.refreshUserList();
-        }
-      ).catch(
-        error => {
-          console.log(error.response.data.message);
-          alert(error.response.data.message);
-        }
-      );
+    UserService.deleteUser(user).then(
+      response => {
+        this.refreshUserList();
+      }
+    ).catch(
+      error => {
+        console.log(error.response.data.message);
+        alert(error.response.data.message);
+      }
+    );
   }
 
   render() {
@@ -220,9 +243,9 @@ export default class BoardAdmin extends Component {
             </thead>
             <tbody>
             <tr>
-              <td><input id="username" value={this.state.newUser.username} onChange={this.updateUsername} required />
+              <td><input id="username" value={this.state.newUser.username} onChange={this.defineUsername} required />
               </td>
-              <td><input id="email" value={this.state.newUser.email} onChange={this.updateMail} type="email" required />
+              <td><input id="email" value={this.state.newUser.email} onChange={this.defineMail} type="email" required />
               </td>
               <td>
                 <div>

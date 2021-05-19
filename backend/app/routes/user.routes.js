@@ -12,31 +12,31 @@ module.exports = function(app) {
 
   app.get(
     "/api/users",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     controller.findAllUsers
   );
 
   app.get(
     "/api/users/:id",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyToken],
     controller.getUser
   );
 
   app.delete(
     "/api/users/:id",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     controller.deleteUser
   );
 
   app.put(
     "/api/users/:id",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     controller.updateUser
   );
 
   app.post(
     "/api/users",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     controller.createUser
   )
 };

@@ -18,7 +18,8 @@ verifyToken = (req, res, next) => {
         message: "Unauthorized!"
       });
     }
-    req.username = decoded.id;
+    req.username = decoded.username;
+    req.roles = decoded.roles;
     isUser(req,res,next);
   });
 };
@@ -98,5 +99,6 @@ const authJwt = {
   isModerator: isModerator,
   isModeratorOrAdmin: isModeratorOrAdmin,
   isUser: isUser,
+
 };
 module.exports = authJwt;
