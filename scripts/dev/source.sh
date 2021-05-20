@@ -11,7 +11,7 @@ function start () {
   bash ${folder}/start.sh $@
 }
 
-function reset () {
+function initialize-db () {
   bash ${folder}/reset.sh $@
 }
 

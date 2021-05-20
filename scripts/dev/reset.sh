@@ -5,3 +5,7 @@ docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml up -d po
 docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml run postgress-initialisation
 
 RESET='true' docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml up -d backend
+
+sleep 5s
+
+RESET='false' docker-compose -f docker-compose.yml -f docker-compose.override.dev.yml up -d backend

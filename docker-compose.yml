@@ -10,11 +10,29 @@ services:
       POSTGRES_USER: ${PGUSER}
       PGUSER: ${PGUSER}
       PGPASSWORD: ${PGPASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    ports:
+    - 5432:5432
     healthcheck:
      test: ["CMD-SHELL", "pg_isready -U admin"]
      interval: 10s
      timeout: 5s
      retries: 5
+
+  postgress-initialisation:
+    image: postgres:13-alpine
+    environment:
+      PGHOST: ${PGHOST}
+      PGUSER: ${PGUSER}
+      PGPASSWORD: ${PGPASSWORD}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+    command: bash -c "psql -c \"CREATE USER ${DB_USER} WITH SUPERUSER NOCREATEDB NOCREATEROLE PASSWORD '${DB_PASSWORD}'\" && psql -c \"CREATE DATABASE ${DB_NAME} OWNER=${DB_USER} ENCODING='utf-8'\""
+    depends_on:
+      postgres:
+        condition: service_healthy
 
   backend:
     image: data-upload-backend:prod
@@ -22,18 +40,25 @@ services:
       context: backend/
       dockerfile: Dockerfile
     restart: unless-stopped
+    ports:
+     - "${PORT}:${PORT}"
     depends_on:
       postgres:
         condition: service_healthy
     volumes:
-      - file_storage:/storage
+      - data_upload_data:/storage
     environment:
-      PGHOST: postgres
-      PGDATABASE: ${PGDATABASE:-drag_n_drop}
-      PGUSER: ${PGUSER}
-      PGPASSWORD: ${PGPASSWORD}
+      RESET: ${RESET:-false}
+      DB_HOST: ${PGHOST}
+      DB_NAME: ${DB_NAME:-data_upload}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
       SECRET: ${SECRET}
       FILE_STORAGE: /storage/
+      ADMIN_USERNAME: ${ADMIN_USERNAME}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      PORT: ${PORT}
 
   nginx-frontend:
     image: data-upload-nginx-frontend:prod
@@ -47,6 +72,8 @@ services:
     environment:
       SERVER_HOSTNAME: ${SERVER_HOSTNAME}
       SSL_CERTIFICATE: ${SSL_CERTIFICATE}
+      BACKEND_HOST: ${BACKEND_HOST}
 
 volumes:
-  file_storage:
+  postgres_data:
+  data_upload_data:

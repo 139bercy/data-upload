@@ -1,8 +1,8 @@
 module.exports = {
-    HOST: process.env['PGHOST'] ?? "localhost",
-    USER: process.env['PGUSER'] ?? "admin",
-    PASSWORD: process.env['PGPASSWORD'] ?? "admin",
-    DB: process.env['PGDATABASE'] ?? "testdb",
+    HOST: process.env['DB_HOST'] ?? "localhost",
+    USER: process.env['DB_USER'] ?? "admin",
+    PASSWORD: process.env['DB_PASSWORD'] ?? "admin",
+    DB: process.env['DB_NAME'] ?? "testdb",
     dialect: "postgres",
     pool: {
       max: 5,
