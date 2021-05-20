@@ -40,14 +40,12 @@ services:
     build:
       context: .
       dockerfile: nginx/Dockerfile
-      args:
-        ENABLED_MODULES: "headers-more"
     ports:
       - 80:80
       - 443:443
     restart: unless-stopped
     environment:
-      HOSTNAME: ${HOSTNAME}
+      SERVER_HOSTNAME: ${SERVER_HOSTNAME}
       SSL_CERTIFICATE: ${SSL_CERTIFICATE}
 
 volumes:
