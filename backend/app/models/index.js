@@ -1,4 +1,5 @@
 const config = require("../config/db.config.js");
+const { reset, update } = require("./reset-database.js");
 
 const Sequelize = require("sequelize");
 const sequelize = new Sequelize(
@@ -21,16 +22,20 @@ const sequelize = new Sequelize(
 
 const db = {};
 
-db.Sequelize = Sequelize;
-db.sequelize = sequelize;
-
-db.user = require("../models/user.model.js")(sequelize, Sequelize);
-db.role = require("../models/role.model.js")(sequelize, Sequelize);
-db.environnement = require("../models/environnement.model.js")(sequelize, Sequelize)
+db.user = require("../models/user.model.js")(sequelize);
+db.role = require("../models/role.model.js")(sequelize);
+db.environnement = require("../models/environnement.model.js")(sequelize)
 
 require("../models/relation-role-user.js")(db);
+require("../models/relation-user-user.js")(db);
 require("../models/relation-environnement-user.js")(db);
 
-db.ROLES = ["user", "admin", "moderator"];
+db.ROLES = ["user", "moderator", "admin"];
+
+if (process.env['RESET']) {
+  reset(sequelize);
+} else {
+  update(sequelize);
+}
 
 module.exports = db;

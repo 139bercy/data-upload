@@ -1,32 +1,44 @@
 import React, { Component } from "react";
 
 import EnvironnementService from "../services/environnement.service";
+import Table from "./table-component";
 
 export default class BoardEnvironnementsComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      content: [],
-      inputValue: ""
+      environnements: [],
+      environmentName: ""
     };
   }
+
+  columns =
+    [
+      {
+        Header: "Nom de l'environnement",
+        accessor: 'name',
+      },
+      {
+        Header: "Supprimer",
+        Cell: (cell) => (
+          <button type="button" className="btn btn-danger"
+                  onClick={() => this.deleteEnvironnement(cell.row.values.name)}>
+            Supprimer
+          </button>
+        )
+      },
+    ];
+
 
   componentDidMount() {
     EnvironnementService.getAllEnvironnements().then(
       response => {
         this.setState({
-          content: response.data
+          environnements: response.data
         });
       },
       error => {
-        this.setState({
-          content:
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString()
-        });
+        console.log(error);
       }
     );
   }
@@ -35,56 +47,38 @@ export default class BoardEnvironnementsComponent extends Component {
     EnvironnementService.deleteEnvironnement(id).then(
       response => {
         this.setState({
-          content: this.state.content.filter(environnement => {
+          environnements: this.state.environnements.filter(environnement => {
             return environnement.name !== id;
           })
         });
       },
       error => {
         console.log("delete ERRROR" + error);
+        alert(error.response.data.message);
       }
     );
   }
 
-  ListEnvironnements = () => {
-    return (
-      <div>
-        {this.state.content.map((env) => (
-          <div key={env.name} className="container shadow-sm p-3 mb-5 bg-body rounded bg-light">
-            <div className="row justify-content-md-center">
-              <div className="col col-lg-2">
-                {env.name}
-              </div>
-              <div className="col col-lg-2">
-                <button id={env.name} type="button" className="btn btn-danger" onClick={() => {
-                  if (window.confirm('Voulez vous vraiment supprimer : ' + env.name)) this.deleteEnvironnement(env.name)
-                }}>Supprimer
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  }
-
-  createEnvironnement = (name) => {
-    EnvironnementService.createEnv(name).then(
+  createEnvironnement = (event) => {
+    event.preventDefault();
+    console.log(this.state.environmentName);
+    EnvironnementService.createEnv(this.state.environmentName).then(
       response => {
-        this.state.content.push(response.data)
+        console.log(response.data);
         this.setState({
-          content: this.state.content
+          environnements: this.state.environnements.concat(response.data)
         });
       },
       error => {
-        console.log("Add ERRROR" + error);
+        console.log(error);
+        alert(error.response.data.message);
       }
     );
   }
 
-  updateInputValue = (evt) => {
+  updateEnvironmentName = (evt) => {
     this.setState({
-      inputValue: evt.target.value
+      environmentName: evt.target.value
     });
   }
 
@@ -93,16 +87,17 @@ export default class BoardEnvironnementsComponent extends Component {
       <div>
         <div className="container shadow-sm p-3 mb-5 bg-body rounded">
           <h3 className="text-center">Ajout d'environnement</h3>
-          <div className="row justify-content-md-center">
-            <input type="text" className="col col-lg-2-auto form-control" id="newEnv"
-                   placeholder="nouvel environnement" value={this.state.inputValue}
-                   onChange={this.updateInputValue}></input>
-            <div className="col col-lg-2">
-              <button id="add-env" type="button" className="btn btn-success"
-                      onClick={() => this.createEnvironnement(this.state.inputValue)}>Ajouter
-              </button>
+
+          <form className="col-auto" onSubmit={this.createEnvironnement}>
+            <div className="row justify-content-md-center">
+              <input type="text" className="col col-lg-2-auto form-control" id="newEnvironnement"
+                     placeholder="nouvel environnement" value={this.state.environmentName}
+                     onChange={this.updateEnvironmentName} required />
+              <div className="col col-lg-1">
+                <button className="btn btn-success">Ajouter</button>
+              </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     );
@@ -116,7 +111,8 @@ export default class BoardEnvironnementsComponent extends Component {
         </header>
         <this.AddEnv></this.AddEnv>
         <h3 className="text-center">Environnement existants</h3>
-        <this.ListEnvironnements></this.ListEnvironnements>
+
+        <Table columns={this.columns} data={this.state.environnements}></Table>
       </div>
     );
   }

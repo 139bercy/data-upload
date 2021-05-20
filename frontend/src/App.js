@@ -4,10 +4,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 import AuthService from "./services/auth.service";
+import UserService from "./services/user.service";
 
 import Login from "./components/login.component";
 import Home from "./components/home.component";
-import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
 import BoardEnvironnementsComponent from "./components/board.environnements.component"
 
@@ -18,8 +18,8 @@ class App extends Component {
     this.logOut = this.logOut.bind(this);
 
     this.state = {
-      showModeratorBoard: false,
-      showAdminBoard: false,
+      isModerator: false,
+      isAdmin: false,
       currentUser: undefined,
       showEnvironnementBoard: true,
     };
@@ -28,26 +28,30 @@ class App extends Component {
   componentDidMount() {
     const user = AuthService.getCurrentUser();
 
-    if (user) {
-      this.setState({
-        currentUser: user,
-        showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
-        showAdminBoard: user.roles.includes("ROLE_ADMIN"),
-        showEnvironnementBoard: user.roles.includes("ROLE_ADMIN")
-      });
-    }
+    UserService.getUser(user ?? {username: 'notloggedin'})
+      .then((response) => {
+        this.setState({
+          currentUser: response.data,
+          isModerator: response.data.roles.includes("moderator"),
+          isAdmin: response.data.roles.includes("admin"),
+        });
+      })
+      .catch(err => {
+        this.logOut();
+      })
   }
 
   logOut() {
     AuthService.logout();
+
   }
 
   render() {
-    const { currentUser, showModeratorBoard, showAdminBoard, showEnvironnementBoard } = this.state;
+    const { currentUser, isModerator, isAdmin } = this.state;
 
     return (
       <div>
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
+        <nav id="top" className="navbar navbar-expand navbar-dark bg-dark">
           <div className="navbar-nav mr-auto">
             {currentUser && (
               <li className="nav-item">
@@ -56,7 +60,7 @@ class App extends Component {
                 </Link>
               </li>
             )}
-            {showModeratorBoard && !showAdminBoard && (
+            {isModerator && !isAdmin && (
               <li className="nav-item">
                 <Link to={"/mod"} className="nav-link">
                   Gestion des utilisateurs
@@ -66,14 +70,16 @@ class App extends Component {
           </div>
 
           <div className="navbar-nav ml-auto">
-            {showEnvironnementBoard && (
+
+            {isAdmin && (
               <li className="nav-item">
                 <Link to={"/environnements"} className="nav-link">
                   Gestion des environnements
                 </Link>
               </li>
             )}
-            {showAdminBoard && (
+
+            {(isModerator || isAdmin) && (
               <li className="nav-item">
                 <Link to={"/admin"} className="nav-link">
                   Administration des comptes
@@ -96,11 +102,10 @@ class App extends Component {
           </div>
         </nav>
 
-        <div className="container mt-3">
+        <div className="container mt-5">
           <Switch>
             <Route exact path={["/", "/upload"]} component={Home} />
             <Route exact path="/login" component={Login} />
-            <Route path="/mod" component={BoardModerator} />
             <Route path="/admin" component={BoardAdmin} />
             <Route path="/environnements" component={BoardEnvironnementsComponent} />
           </Switch>

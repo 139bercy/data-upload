@@ -11,10 +11,10 @@ De cette manière l'ingestion des données ne passe plus par les datascientists.
 ### Installation en utilisant le répertoire
 Avant d'installer Docker Engine pour la première fois sur une nouvelle machine, vous devez configurer le dossier Docker. Ensuite, vous pouvez installer et mettre à jour Docker à partir du dossier.
 - Mise à jour des paquets
-```SH
+```sh
 sudo apt-get update
 ```
-```SH
+```sh
 sudo apt-get install \
     apt-transport-https \
     ca-certificates \
@@ -23,59 +23,59 @@ sudo apt-get install \
     lsb-release
 ```
 - Ajout de clef GPG officiel de Docker
-```shell
+```sh
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 ```
 - Mise en place du référentiel stable
-```shell
+```sh
 echo \
   "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 ```
 ###Docker Engine
-```shell
+```sh
 sudo apt-get update
 
 sudo apt-get install docker-ce docker-ce-cli containerd.io
 ```
-- vérification de l'installation 
-```shell
+- vérification de l'installation
+```sh
 sudo docker run hello-world
 ```
 ### Retirer la commande sudo devant les commandes Docker
 creation du groupe docker
-```shell
+```sh
 sudo groupadd docker
 ```
 Ajout de l'utilisateur dans le groupe docker
-```shell
+```sh
 sudo usermod -aG docker $USER
 ```
 Activation des changements du groupe
-```shell
+```sh
 newgrp docker
 ```
 Test pour vérifier que la commande sudo n'est plus nécessaire
-```shell
+```sh
 docker run hello-world
 ```
 - Démarrer Docker au démarrage de l'ordinateur
-```shell
+```sh
 sudo systemctl enable docker.service
 sudo systemctl enable containerd.service
 ```
 ### Docker compose installation
 Téléchargement
-```shell
+```sh
 sudo curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 ```
 Changement des permissions
-```shell
+```sh
 sudo chmod +x /usr/local/bin/docker-compose
-```xxœ
+```
 Vérification de l'installation
-```shell
+```sh
 docker-compose --version
 ```
 
@@ -83,7 +83,10 @@ Liens utiles :
 - https://docs.docker.com/engine/install/debian/
 - https://docs.docker.com/engine/install/linux-postinstall/
 - https://docs.docker.com/compose/install/
-  
+
+Pour tout autres installation la documentation se retrouve sur le site de docker :
+- https://docs.docker.com/get-docker/
+
 Pour tout autres installation la documentation se retrouve sur le site de docker :
 - https://docs.docker.com/get-docker/
 
@@ -92,7 +95,7 @@ Pour tout autres installation la documentation se retrouve sur le site de docker
 Plusieurs scripts sont intégrés dans le projet afin de pouvoir lancer l'application.
 
 Pour commencer, installez les dépendances pour npm dans docker :
-```shell
+```sh
 bash npm-install.sh
 ```
 
@@ -138,7 +141,7 @@ bash logs.sh -f <nom du service>
 
 Cette option permet de rafraichir dynamiquement les logs afin de les visualiser en continue.
 
-### Annexes 
+### Annexes
 ### postgresql
 - Si vous avez déjà un postgresql qui tourne sur votre machine, les lignes 13-14 du fichier `docker-compose.override.dev.yml` sont commentés afin de ne pas entrer en conflit.
 

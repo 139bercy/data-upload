@@ -1,4 +1,6 @@
-module.exports = (sequelize, Sequelize) => {
+const Sequelize = require("sequelize");
+
+module.exports = (sequelize) => {
   return sequelize.define("environnement", {
     name: {
       type: Sequelize.STRING,

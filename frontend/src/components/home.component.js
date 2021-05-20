@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import axios from 'axios';
 
 import Dropzone from "react-dropzone";
-import authHeader from "../services/auth-header";
 import Environnement from "../services/environnement.service";
 
 class Home extends Component {
@@ -31,7 +30,7 @@ class Home extends Component {
         console.log("filename :" + file.name);
         formData.append(file.name, file);
         console.log(formData.getAll(file.name));
-        axios.post('/api/upload/' + this.state.environnement, formData, { headers: authHeader() })
+        axios.post('/api/upload/' + this.state.environnement, formData)
           .then(res => {
             console.log(res);
           }).catch(err => {

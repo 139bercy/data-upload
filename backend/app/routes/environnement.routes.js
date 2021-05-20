@@ -11,7 +11,7 @@ module.exports = function (app) {
 
     app.get(
       "/api/environnements",
-      [authJwt.verifyToken, authJwt.isAdmin],
+      [authJwt.verifyToken],
       controller.findAllEnvironnement
     );
 
