@@ -12,7 +12,7 @@ docker ps -q --filter \"name=data-upload-backend-\" | xargs --no-run-if-empty do
 
 docker run -d --name data-upload-backend-${date} \
   --restart=unless-stopped \
-  -v data_upload_data:/var/lib/postgresql/data \
+  -v data_upload_data:/storage \
   -p ${PORT}:${PORT} \
   -e RESET=false \
   -e DB_HOST=${PGHOST} \
@@ -21,6 +21,7 @@ docker run -d --name data-upload-backend-${date} \
   -e DB_PASSWORD=\"${DB_PASSWORD}\" \
   -e PORT=${PORT} \
   -e SECRET=\"${SECRET}\" \
+  -e FILE_STORAGE=\"/storage\" \
   data-upload-backend:prod
 
 set +x

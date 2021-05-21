@@ -46,14 +46,14 @@ then
   bash $(dirname $0)/initialize-db.sh
 fi
 
-echo ""
-go=n
-echo "Do you want to generate Let's encrypt certificates ? [y/n]"
-read go
-if [[ "$go" == "y" ]]
-then
-  bash $(dirname $0)/certbot.sh
-fi
+# echo ""
+# go=n
+# echo "Do you want to generate Let's encrypt certificates ? [y/n]"
+# read go
+# if [[ "$go" == "y" ]]
+# then
+#   bash $(dirname $0)/certbot.sh
+# fi
 
 echo ""
 go=n
