@@ -1,7 +1,22 @@
+# # redirect all http traffic to https
+# server {
+#   listen 80 default_server;
+#   listen [::]:80 default_server;
+#   server_name $HOSTNAME;
+#   return 301 https://$host$request_uri;
+# }
+
+upstream backend {
+    server $BACKEND_HOST;
+}
+
 server {
 
+  # listen      443 ssl;
   listen      80;
-  server_name localhost;
+  server_name $SERVER_HOSTNAME;
+
+  $SSL_CERTIFICATE
 
   include /etc/nginx/general-security-headers.conf;
 
@@ -13,7 +28,7 @@ server {
   }
 
   location ~ /api {
-    proxy_pass http://backend:8080;
+    proxy_pass http://backend;
     proxy_redirect     off;
 
     proxy_set_header   Host                 $host;
