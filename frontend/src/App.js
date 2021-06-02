@@ -9,7 +9,7 @@ import UserService from "./services/user.service";
 import Login from "./components/login.component";
 import Home from "./components/home.component";
 import BoardAdmin from "./components/board-admin.component";
-import BoardEnvironnementsComponent from "./components/board.environnements.component"
+import BoardIndexesComponent from "./components/board.indexes.component"
 
 
 class App extends Component {
@@ -21,7 +21,6 @@ class App extends Component {
       isModerator: false,
       isAdmin: false,
       currentUser: undefined,
-      showEnvironnementBoard: true,
     };
   }
 
@@ -73,8 +72,8 @@ class App extends Component {
 
             {isAdmin && (
               <li className="nav-item">
-                <Link to={"/environnements"} className="nav-link">
-                  Gestion des environnements
+                <Link to={"/indexes"} className="nav-link">
+                  Gestion des indexes
                 </Link>
               </li>
             )}
@@ -107,7 +106,7 @@ class App extends Component {
             <Route exact path={["/", "/upload"]} component={Home} />
             <Route exact path="/login" component={Login} />
             <Route path="/admin" component={BoardAdmin} />
-            <Route path="/environnements" component={BoardEnvironnementsComponent} />
+            <Route path="/indexes" component={BoardIndexesComponent} />
           </Switch>
         </div>
       </div>

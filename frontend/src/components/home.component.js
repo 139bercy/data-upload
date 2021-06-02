@@ -2,19 +2,19 @@ import React, { Component } from "react";
 import axios from 'axios';
 
 import Dropzone from "react-dropzone";
-import Environnement from "../services/environnement.service";
+import IndexService from "../services/indexes.service";
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      environnements: [],
-      environnement: "",
+      indexes: [],
+      index: "",
       content: ""
     };
 
     this.handleChange = (event) => {
-      this.setState({ environnement: event.target.value });
+      this.setState({ index: event.target.value });
     };
 
     this.onDropRejected = (rejectedFiles) => {
@@ -30,7 +30,7 @@ class Home extends Component {
         console.log("filename :" + file.name);
         formData.append(file.name, file);
         console.log(formData.getAll(file.name));
-        axios.post('/api/upload/' + this.state.environnement, formData)
+        axios.post('/api/upload/' + this.state.index, formData)
           .then(res => {
             console.log(res);
           }).catch(err => {
@@ -41,11 +41,11 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    Environnement.getAllEnvironnements()
+    IndexService.getAll()
       .then(
         (response) => {
           this.setState({
-            environnements: response.data
+            indexes: response.data
           });
         })
       .catch(
@@ -58,26 +58,26 @@ class Home extends Component {
 
   render() {
 
-    let optionTemplate = this.state.environnements.map(v => (
+    let optionTemplate = this.state.indexes.map(v => (
       <option key={v.name} value={v.name}>{v.name}</option>
     ));
 
     return (
       <div className="container">
         <header className="jumbotron">
-          <label>Choisissez le projet dans lequel envoyer les documents:
+          <label>Choisissez l'index dans lequel envoyer les documents:
             <select onChange={this.handleChange} defaultValue={""}>
-              <option value="">Veuillez selectioner l'environnement</option>
+              <option value="">Veuillez selectioner l'index</option>
               {optionTemplate}
             </select>
           </label>
-          {this.state.environnement !== "" &&
+          {this.state.index !== "" &&
           <label>Veuillez utiliser le cadre ci-dessous pour envoyer les fichiers de données
-            dans {this.state.environnement}</label>
+            dans {this.state.index}</label>
           }
         </header>
 
-        <div style={this.state.environnement === "" ? { pointerEvents: "none", opacity: "0.4" } : {}}>
+        <div style={this.state.index === "" ? { pointerEvents: "none", opacity: "0.4" } : {}}>
           <Dropzone
             onDropAccepted={this.onDropAccepted}
             onDropRejected={this.onDropRejected}
@@ -87,7 +87,7 @@ class Home extends Component {
               <section className="dropzone">
                 <div {...getRootProps()}>
                   <input {...getInputProps()} />
-                  <p>Drag 'n' drop some files here, or click to select files</p>
+                  <p>Déposez des fichiers ici ou cliquez pour sélectionner des fichiers</p>
                 </div>
               </section>
             )}

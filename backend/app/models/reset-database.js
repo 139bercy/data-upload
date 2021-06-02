@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 
-async function resetDatabase(User, Role, Environnement) {
+async function resetDatabase(User, Role, Index) {
   Role.create({
     id: 1,
     name: "user"
@@ -16,52 +16,52 @@ async function resetDatabase(User, Role, Environnement) {
     name: "admin"
   });
 
-  Environnement.create({
+  Index.create({
     name: "plan-relance",
     path: "plan-relance"
   });
-  Environnement.create({
+  Index.create({
     name: "decp",
     path: "decp"
   });
-  Environnement.create({
+  Index.create({
     name: "data-360_DGF_Lingua",
     path: "data-360/DGF/Lingua"
   });
-  Environnement.create({
+  Index.create({
     name: "data-360_DGF_TAXI",
     path: "data-360/DGF/TAXI"
   });
-  Environnement.create({
+  Index.create({
     name: "data-360_DGF_RPZ",
     path: "data-360/DGF/RPZ"
   });
-  Environnement.create({
+  Index.create({
     name: "data-360_DGF_MISSION",
     path: "data-360/DGF/MISSION"
   });
-  Environnement.create({
+  Index.create({
     name: "data-360_DGF_FB",
     path: "data-360/DGF/FB"
   });
-  Environnement.create({
+  Index.create({
     name: "data-360_DGF_REPRO",
     path: "data-360/DGF/REPRO"
   });
-  Environnement.create({
+  Index.create({
     name: "data-360_DGF_DOC",
     path: "data-360/DGF/DOC"
   });
-  Environnement.create({
+  Index.create({
     name: "data-360_DGF_AFF",
     path: "data-360/DGF/AFF"
   });
-  Environnement.create({
+  Index.create({
     name: "data-360_DGF_MIS2",
     path: "data-360/DGF/MIS2"
   });
   if (typeof process.env['ADMIN_USERNAME'] == 'string' && typeof process.env['ADMIN_EMAIL'] == 'string' && typeof process.env['ADMIN_PASSWORD'] == 'string') {
-    console.log('Création du compte admin depuis les informations d\'environnement fournies');
+    console.log('Création du compte admin depuis les variables d\'environnement fournies');
     User.create({
       id: 1,
       username: process.env['ADMIN_USERNAME'],
@@ -76,12 +76,12 @@ async function resetDatabase(User, Role, Environnement) {
 exports.reset = (sequelize) => {
   const Role = sequelize.model('role');
   const User = sequelize.model('user');
-  const environnement = sequelize.model('environnement');
+  const Index = sequelize.model('index');
 
 // force will drop the table if it already exists
   sequelize.sync({ force: true }).then(() => {
     console.log('Réinitialisation de la base de données');
-    return resetDatabase(User, Role, environnement);
+    return resetDatabase(User, Role, Index);
   });
 };
 

@@ -1,21 +1,23 @@
 const db = require("../models");
 
-const Environment = db.environnement;
+const Index = db.index;
 
-exports.upload = function (req, res) {
+exports.upload = async function (req, res) {
 
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).send('No files were uploaded.');
   }
-  let environnement  = Environment.findOne({ $where: { name: req.params.environnement } });
-  if (environnement === null) {
-    return res.status(400).send(req.params.environnement + ' is not a valid environnement');
+  let index = await Index.findByPk(req.params.index);
+  console.log(index)
+  if (index === null) {
+    return res.status(400).send(req.params.index + ' is not a valid index !');
   }
 
   let promises = Object.keys(req.files).map(filename => {
     console.log(filename);
     let file = req.files[filename];
-    let uploadPath = process.env['FILE_STORAGE'] + '/' + environnement.path + '/' + file.name;
+    let uploadPath = process.env['FILE_STORAGE'] + '/' + index.path + '/' + file.name;
+    console.log(uploadPath);
 
     // Use the mv() method to place the file somewhere on your server
     return file.mv(uploadPath);

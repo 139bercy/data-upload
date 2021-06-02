@@ -24,11 +24,11 @@ const db = {};
 
 db.user = require("../models/user.model.js")(sequelize);
 db.role = require("../models/role.model.js")(sequelize);
-db.environnement = require("../models/environnement.model.js")(sequelize)
+db.index = require("./index.model.js")(sequelize)
 
 require("../models/relation-role-user.js")(db);
 require("../models/relation-user-user.js")(db);
-require("../models/relation-environnement-user.js")(db);
+require("./relation-index-user.js")(db);
 
 db.ROLES = ["user", "moderator", "admin"];
 
