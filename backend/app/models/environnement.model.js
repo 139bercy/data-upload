@@ -5,6 +5,9 @@ module.exports = (sequelize) => {
     name: {
       type: Sequelize.STRING,
       primaryKey: true
+    },
+    path: {
+      type: Sequelize.STRING,
     }
   });
 };

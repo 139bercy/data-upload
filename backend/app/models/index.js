@@ -33,8 +33,10 @@ require("../models/relation-environnement-user.js")(db);
 db.ROLES = ["user", "moderator", "admin"];
 
 if (process.env['RESET'] === "true") {
+  console.log("reset");
   reset(sequelize);
 } else {
+  console.log("update");
   update(sequelize);
 }
 

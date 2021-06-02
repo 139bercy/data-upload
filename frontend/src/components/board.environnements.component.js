@@ -3,12 +3,34 @@ import React, { Component } from "react";
 import EnvironnementService from "../services/environnement.service";
 import Table from "./table-component";
 
+// function onChange(environnement, field) {
+//   return (event) => {
+//     const oldField = environnement[field];
+//     environnement[field] = event.target.value;
+//     return EnvironnementService.update(environnement)
+//       .catch(error => {
+//         console.log(error);
+//         alert(error.response.data.message);
+//         environnement[field] = oldField;
+//       });
+//   }
+// }
+//
+// function onNameChange(environnement) {
+//   return onChange(environnement, "name");
+// }
+//
+// function onPathChange(environnement) {
+//   return onChange(environnement, "path");
+// }
+
 export default class BoardEnvironnementsComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
       environnements: [],
-      environmentName: ""
+      environmentName: "",
+      environmentPath: "",
     };
   }
 
@@ -17,6 +39,24 @@ export default class BoardEnvironnementsComponent extends Component {
       {
         Header: "Nom de l'environnement",
         accessor: 'name',
+        // Cell: cell => (
+        //   <div>
+        //     <input type="text" className="col col-lg-2-auto form-control"
+        //            placeholder="Nom du nouvel environnement" value={cell.row.values.name}
+        //            onChange={onNameChange(cell.row.values)} required />
+        //   </div>
+        // )
+      },
+      {
+        Header: "Hiérarchie de dossier",
+        accessor: 'path',
+        // Cell: cell => (
+        //   <div>
+        //     <input type="text" className="col col-lg-2-auto form-control"
+        //            placeholder="Hiérarchie des dossiers" value={cell.row.values.path}
+        //            onChange={onPathChange(cell.row.values)} required />
+        //   </div>
+        // )
       },
       {
         Header: "Supprimer",
@@ -62,7 +102,7 @@ export default class BoardEnvironnementsComponent extends Component {
   createEnvironnement = (event) => {
     event.preventDefault();
     console.log(this.state.environmentName);
-    EnvironnementService.createEnv(this.state.environmentName).then(
+    EnvironnementService.createEnv({ name: this.state.environmentName, path: this.state.environmentPath }).then(
       response => {
         console.log(response.data);
         this.setState({
@@ -81,6 +121,11 @@ export default class BoardEnvironnementsComponent extends Component {
       environmentName: evt.target.value
     });
   }
+  updateEnvironmentPath = (evt) => {
+    this.setState({
+      environmentPath: evt.target.value
+    });
+  }
 
   AddEnv = () => {
     return (
@@ -89,14 +134,31 @@ export default class BoardEnvironnementsComponent extends Component {
           <h3 className="text-center">Ajout d'environnement</h3>
 
           <form className="col-auto" onSubmit={this.createEnvironnement}>
-            <div className="row justify-content-md-center">
-              <input type="text" className="col col-lg-2-auto form-control" id="newEnvironnement"
-                     placeholder="nouvel environnement" value={this.state.environmentName}
-                     onChange={this.updateEnvironmentName} required />
-              <div className="col col-lg-1">
-                <button className="btn btn-success">Ajouter</button>
-              </div>
-            </div>
+            <table className="table table-bordered table-striped text-center">
+              <thead>
+              <tr>
+                <th>Nom du nouvel environnement</th>
+                <th>Hiérarchie de dossier</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td>
+                  <input type="text" className="col col-lg-2-auto form-control" id="newEnvironnementName"
+                         placeholder="Nom du nouvel environnement" value={this.state.environmentName}
+                         onChange={this.updateEnvironmentName} required />
+                </td>
+                <td>
+                  <input type="text" className="col col-lg-2-auto form-control" id="newEnvironnementPath"
+                         placeholder="Hiérarchie des dossiers pour l'environnement" value={this.state.environmentPath}
+                         onChange={this.updateEnvironmentPath} required />
+                </td>
+                <td>
+                  <button className="btn btn-success">Ajouter</button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
           </form>
         </div>
       </div>

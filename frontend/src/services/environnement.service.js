@@ -8,13 +8,16 @@ class EnvService {
     return axios.get(API_URL);
   }
 
-
-  deleteEnvironnement(env) {
-    return axios.delete(API_URL + '/' + env);
+  update(environment) {
+    return axios.put(API_URL + '/' + environment.name, environment);
   }
 
-  createEnv(name) {
-    return axios.post(API_URL, { "name": name });
+  deleteEnvironnement(environmentName) {
+    return axios.delete(API_URL + '/' + environmentName);
+  }
+
+  createEnv(environment) {
+    return axios.post(API_URL, environment);
   }
 }
 
