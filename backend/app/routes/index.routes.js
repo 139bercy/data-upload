@@ -1,5 +1,5 @@
 const { authJwt } = require("../middleware");
-const controller = require("../controllers/environnement.controller");
+const controller = require("../controllers/index.controller");
 
 module.exports = function (app) {
   app.use(function (req, res, next) {
@@ -10,20 +10,20 @@ module.exports = function (app) {
     next();
 
     app.get(
-      "/api/environnements",
+      "/api/indexes",
       [authJwt.verifyToken],
-      controller.findAllEnvironnement
+      controller.findAll
     );
 
     app.delete(
-      "/api/environnements/:id",
+      "/api/indexes/:id",
       [authJwt.verifyToken, authJwt.isAdmin],
-      controller.deleteEnvironnement
+      controller.delete
     );
     app.post(
-      "/api/environnements",
+      "/api/indexes",
       [authJwt.verifyToken, authJwt.isAdmin],
-      controller.addEnvironnement
+      controller.add
     );
   });
 };

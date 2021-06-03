@@ -60,7 +60,7 @@ exports.findAllUsers = (req, res) => {
       console.log(err);
       res.status(500).send({
         message:
-          err.message || "Some error occured while retrieving users"
+          err.message || "Une erreur est apparu lors de la récupération de la liste des utilisateurs !"
       });
     });
 };
@@ -92,7 +92,7 @@ exports.getUser = (req, res) => {
       console.log(err);
       res.status(500).json({
         message:
-          err.message || "Some error occured while retrieving users"
+          err.message || "Une erreur est apparue lors de la récupération des informations d'un utilisateur !"
       });
     });
 };
@@ -111,7 +111,7 @@ exports.deleteUser = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occured while retrieving users"
+          err.message || "Une erreur inconnu est apparue lors de la suppression d'un utilisateur !"
       });
     });
 };
@@ -144,7 +144,7 @@ exports.updateUser = (req, res) => {
       console.log(err);
       res.status(500).json({
         message:
-          err.message || "Some error occured while retrieving users"
+          err.message || "Une erreur est apparue lors de la mise à jour d'un utilisateur"
       });
     });
 };
@@ -182,7 +182,7 @@ exports.createUser = (req, res) => {
           console.log(err)
           res.status(500).json({
             message:
-              err.message || "Some error occured while retrieving users"
+              err.message || "Une erreur inconnu est apparue lors de la création d'un utilisateur !"
           });
         });
     });
@@ -192,14 +192,13 @@ exports.createUser = (req, res) => {
 function sendUser(status, user, res) {
   mapRoles(user)
     .then(user => {
-      console.log("toto", user);
       res.status(status).json(user);
     })
     .catch(error => {
       console.log(error);
       res.status(500).json({
         message:
-          error.message || "Some error occured while retrieving users"
+          error.message || "Une erreur inconnue est apparue lors de la récupération des informations de l'utilisateur !"
       });
     });
 }

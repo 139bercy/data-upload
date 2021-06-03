@@ -2,7 +2,7 @@
 
 Cette application a pour but de fournir un point d'entrée pour les métiers afin qu'ils puissent ajouter de la données dans les environnements d'analyse.
 
-De cette manière l'ingestion des données ne passe plus par les datascientists.
+De cette manière l'ingestion des données ne passe plus par les data-scientistes.
 
 ## Installation de Docker sur Debian
 ### Désinstallation des anciennes version
