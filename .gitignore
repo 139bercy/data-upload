@@ -1,0 +1,6 @@
+/certificates/*.pem
+/certificates/*.ec
+/certificates/certigna/
+
+/deploy/
+/dump/
