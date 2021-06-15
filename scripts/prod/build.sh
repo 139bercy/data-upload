@@ -8,6 +8,7 @@ mkdir deploy || true
 docker-compose -f docker-compose.yml build
 
 # Suppression des images déjà existantes
+rm -rf deploy/postgres.tar
 rm -rf deploy/data-upload-backend.tar
 rm -rf deploy/data-upload-nginx-frontend.tar
 
