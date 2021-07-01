@@ -96,22 +96,22 @@ Plusieurs scripts sont intégrés dans le projet afin de pouvoir lancer l'applic
 
 Pour commencer, installez les dépendances pour npm dans docker :
 ```sh
-bash npm-install.sh
+bash scripts/dev/npm-install.sh
 ```
 
 Dans un premier temps, vous devez démarrer l'application :
 ```sh
-bash start.sh
+bash scripts/dev/start.sh
 ```
 
 Il faut ensuite initialiser la base de données :
 ```sh
-bash reset.sh
+bash scripts/dev/reset.sh
 ```
 
 Si vous avez de nouvelle dépendances dans votre `package.json` du dossier `backend` ou `frontend`, je vous invite à relancer la commande suivante :
 ```sh
-bash install-dependencies.sh
+bash scripts/dev/install-dependencies.sh
 ```
 Cette commande doit aussi être lancé lors de la récupération du projet.
 
@@ -119,7 +119,7 @@ Après l'exécution de ces 2 (ou 3) commandes, vous devriez pouvoir accéder à 
 
 Si vous souhaitez arrêter l'application, vous pouvez exécuter la commande suivante :
 ```sh
-bash stop.sh
+bash scripts/dev/stop.sh
 ```
 
 ### Accès au log des dockers
