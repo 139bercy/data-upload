@@ -22,4 +22,6 @@ module.exports = function(app) {
   );
 
   app.post("/api/auth/signin", controller.signin);
+
+  app.post("/send_email/:email", controller.passwordReset)
 };

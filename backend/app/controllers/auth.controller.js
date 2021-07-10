@@ -8,6 +8,11 @@ const Role = db.role;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
+const transporter = nodemailer.createTransport({
+  host: "mailhog",
+  port: 1025
+});
+
 exports.signup = (req, res) => {
   // Save User to Database
   User.create({
@@ -37,6 +42,40 @@ exports.signup = (req, res) => {
       res.status(500).send({ message: err.message });
     });
 };
+
+
+exports.passwordReset = (req, res) => {
+  // Save User to Database
+  User.findOne({
+    where: {
+      email: req.body.email
+    }
+  })
+    .then(user => {
+      if (!user) {
+        return res.status(404).send({ message: "L'utilisateur n'existe pas." });
+      }
+      if (!user.enable) {
+        return res.status(403).send({ message: "Votre compte n'est pas actif." });
+      }
+
+      // TODO: send email to the user
+      
+      const messageStatus = transporter.sendMail({
+        from: "My Company <company@companydomain.org>",
+        to: email,
+        subject: "reset password",
+        text: "This is the email content",
+      });
+    
+      if (!messageStatus) console.log("Error sending message!");
+    
+      console.log("Mail Sent!");
+    
+      
+    })
+};
+
 
 exports.signin = (req, res) => {
   User.findOne({
