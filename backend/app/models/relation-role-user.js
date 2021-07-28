@@ -1,5 +1,5 @@
 module.exports = (db) => {
-    db.user.belongsToMany(db.role, {
+    db.User.belongsToMany(db.Role, {
         through: 'user_roles', as: 'roles'
     });
 };

@@ -1,8 +1,8 @@
 module.exports = (db) => {
-  db.index.belongsToMany(db.user, {
+  db.Index.belongsToMany(db.User, {
     through: "user_indexes",
   });
-  db.user.belongsToMany(db.index, {
+  db.User.belongsToMany(db.Index, {
     through: "user_indexes",
   });
 };

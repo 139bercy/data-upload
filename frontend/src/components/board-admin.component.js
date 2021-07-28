@@ -8,33 +8,35 @@ const rolesList = { user: 'user', moderator: 'moderator', admin: 'admin' };
 const rolesTrad = { 'user': 'Utilisateur', 'moderator': 'Modérateur', 'admin': 'Administrateur' };
 
 function onEnableUserChange(user) {
-  return () => {
+  return async () => {
     const oldEnable = user.enable;
     user.enable = !user.enable;
-    return UserService.updateUser(user)
-      .catch(error => {
-        console.log(error);
-        alert(error.response.data.message);
-        user.enable = oldEnable;
-      });
+    try {
+      return UserService.updateUser(user);
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.message);
+      user.enable = oldEnable;
+    }
   }
 }
 
 function onRolesUserChange(user) {
-  return (event) => {
+  return async (event) => {
     const oldRoles = user.roles;
     user.roles = defineRoles(event.target.value);
-    return UserService.updateUser(user)
-      .catch(error => {
-        console.log(error);
-        alert(error.response.data.message);
-        user.roles = selectRole(oldRoles);
-      });
+    try {
+      return UserService.updateUser(user);
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.message);
+      user.roles = selectRole(oldRoles);
+    }
   }
 }
 
 function selectRole(roles) {
-  console.log(roles);
+  roles = roles.map(role => role.name);
   if (roles.includes(rolesList.admin)) {
     return rolesList.admin;
   }
@@ -47,24 +49,20 @@ function selectRole(roles) {
 }
 
 function defineRoles(role) {
-  console.log(role);
   let roles = [];
   if (role === rolesList.admin) {
-    console.log(rolesList.admin + ' included');
     roles.push(rolesList.admin);
   }
   if (role === rolesList.moderator || role === rolesList.admin) {
-    console.log(rolesList.moderator + ' included');
     roles.push(rolesList.moderator);
   }
   if (role === rolesList.user || role === rolesList.moderator || role === rolesList.admin) {
-    console.log(rolesList.user + ' included');
     roles.push(rolesList.user);
   }
   return roles;
 }
 
-function roleOptionTemplate(cell) {
+function roleOptionTemplate(_) {
   return Object.values(rolesList).map(role => (
       <option key={role} value={role}>{rolesTrad[role]}</option>
     )
@@ -173,7 +171,6 @@ export default class BoardAdmin extends Component {
     const { value } = event.target;
 
     const roles = defineRoles(value);
-    console.log(roles);
     this.setState((prevState) => ({
       newUser: {
         ...prevState.newUser,
@@ -182,48 +179,30 @@ export default class BoardAdmin extends Component {
     }));
   }
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
-    return UserService.createUser(this.state.newUser)
-      .then(response => {
-          this.refreshUserList();
-        }
-      ).catch(error => {
-          console.log(error.response.data.message);
-          alert(error.response.data.message);
-        }
-      );
+    try {
+      await UserService.createUser(this.state.newUser);
+      this.refreshUserList();
+    } catch (error) {
+      console.log(error.response.data.message);
+      alert(error.response.data.message);
+    }
   }
 
-  refreshUserList() {
+  async refreshUserList() {
     this.setState(() => ({
       users: []
     }))
-    UserService.getUsers().then(
-      response => {
-        this.setState(() => ({
-          users: response.data
-        }))
-      }
-    ).catch(
-      error => {
-        console.log(error.response.data.message);
-        alert(error.response.data.message);
-      }
-    );
+    let { data } = await UserService.getUsers()
+    this.setState(() => ({
+      users: data
+    }))
   }
 
-  deleteUser(user) {
-    UserService.deleteUser(user).then(
-      response => {
-        this.refreshUserList();
-      }
-    ).catch(
-      error => {
-        console.log(error.response.data.message);
-        alert(error.response.data.message);
-      }
-    );
+  async deleteUser(user) {
+    await UserService.deleteUser(user)
+    this.refreshUserList();
   }
 
   render() {

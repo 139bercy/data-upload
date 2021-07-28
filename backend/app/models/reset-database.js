@@ -1,5 +1,3 @@
-const bcrypt = require("bcryptjs");
-
 async function resetDatabase(User, Role, Index) {
   Role.create({
     id: 1,
@@ -66,7 +64,7 @@ async function resetDatabase(User, Role, Index) {
       id: 1,
       username: process.env['ADMIN_USERNAME'],
       email: process.env['ADMIN_EMAIL'],
-      password: bcrypt.hashSync(process.env['ADMIN_PASSWORD'], 8),
+      password: process.env['ADMIN_PASSWORD'],
     }).then(user => user.setRoles(["user", "moderator", "admin"]))
   } else {
     console.log('Vous devez spécifier en variable d\'environnement, les variables suivantes : ADMIN_USERNAME, ADMIN_PASSWORD, ADMIN_EMAIL');

@@ -8,6 +8,8 @@ services:
       POSTGRES_USER: admin
       PGUSER: admin
       PGPASSWORD: admin
+    ports:
+      - 5432:5432
     volumes:
       - postgres_data:/var/lib/postgresql
 
@@ -43,6 +45,7 @@ services:
       ADMIN_PASSWORD: admin
       ADMIN_EMAIL: admin@admin.admin
       FILE_STORAGE: /storage/
+      PASSWORD_STRENGH_VALIDATION: 'false'
     command: ./node_modules/nodemon/bin/nodemon.js -L /src/app/server.js
 
   frontend:

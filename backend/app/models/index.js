@@ -22,9 +22,9 @@ const sequelize = new Sequelize(
 
 const db = {};
 
-db.user = require("../models/user.model.js")(sequelize);
-db.role = require("../models/role.model.js")(sequelize);
-db.index = require("./index.model.js")(sequelize)
+db.User = require("../models/user.model.js")(sequelize);
+db.Role = require("../models/role.model.js")(sequelize);
+db.Index = require("./index.model.js")(sequelize)
 
 require("../models/relation-role-user.js")(db);
 require("../models/relation-user-user.js")(db);
