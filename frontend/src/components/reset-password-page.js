@@ -1,5 +1,5 @@
+// Note: Uncomment import lines during working with JSX Compiler.
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
@@ -16,70 +16,54 @@ const required = value => {
   }
 };
 
-export default class Login extends Component {
+const message = "Un email vous a été envoyé pour vous permettre la réinitialisation de votre mot de passe.\nSi vous ne recevez pas de mail, veuillez vérifier l'adresse email indiqué dans ce formulaire ou contacter le support."
+
+export default class ResetPassword extends Component {
   constructor(props) {
     super(props);
-    this.handleLogin = this.handleLogin.bind(this);
-    this.onChangeUsername = this.onChangeUsername.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
 
     this.state = {
-      username: "",
-      password: "",
+      email: "",
       loading: false,
       message: ""
     };
-  }
 
-  onChangeUsername(e) {
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
+  }
+  onChangeEmail(e) {
     this.setState({
-      username: e.target.value
+      email: e.target.value
     });
   }
-
-  onChangePassword(e) {
-    this.setState({
-      password: e.target.value
-    });
-  }
-
-  handleLogin(e) {
+  handleSubmit(e) {
     e.preventDefault();
-
     this.setState({
       message: "",
       loading: true
     });
 
     this.form.validateAll();
-
-    if (this.checkBtn.context._errors.length === 0) {
-      AuthService.login(this.state.username, this.state.password).then(
-        () => {
-          this.props.history.push("/");
-          window.location.reload();
-        },
-        error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-
-          this.setState({
-            loading: false,
-            message: resMessage
-          });
-        }
-      );
-    } else {
-      this.setState({
-        loading: false
-      });
-    }
-  }
-
+    AuthService.resetPassword(this.state.email)
+    .then(() => this.setState({
+      loading: false,
+      message: message
+    }))
+    .catch(error => {
+      console.log(error.status)
+      if (error.status === 403) {
+        this.setState({
+          loading: false,
+          message: message
+        })
+      } else {
+        this.setState({
+          loading: false,
+          message: "Une erreur inconnue est survenue. Veuillez contacter le support."
+        })
+      }
+    })
+  };
   render() {
     return (
       <div className="col-md-12">
@@ -91,31 +75,19 @@ export default class Login extends Component {
           />
 
           <Form
-            onSubmit={this.handleLogin}
+            onSubmit={this.handleSubmit}
             ref={c => {
               this.form = c;
             }}
           >
             <div className="form-group">
-              <label htmlFor="username">Nom d'utilisateur</label>
+              <label htmlFor="email">Email :</label>
               <Input
                 type="text"
                 className="form-control"
-                name="username"
-                value={this.state.username}
-                onChange={this.onChangeUsername}
-                validations={[required]}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="password">Mot de passe</label>
-              <Input
-                type="password"
-                className="form-control"
-                name="password"
-                value={this.state.password}
-                onChange={this.onChangePassword}
+                name="email"
+                value={this.state.email}
+                onChange={this.onChangeEmail}
                 validations={[required]}
               />
             </div>
@@ -128,10 +100,9 @@ export default class Login extends Component {
                 {this.state.loading && (
                   <span className="spinner-border spinner-border-sm"></span>
                 )}
-                <span>Connexion</span>
+                <span>Réinitialiser le mot de passe</span>
               </button>
             </div>
-
             {this.state.message && (
               <div className="form-group">
                 <div className="alert alert-danger" role="alert">
@@ -145,15 +116,9 @@ export default class Login extends Component {
                 this.checkBtn = c;
               }}
             />
-          </Form>
-
-          <div className="container" style={{'textAlign': 'center'}}>
-            <Link to={"/reset-password"} className="nav-link">
-              Mot de passe oublié
-            </Link>
-          </div>
+        </Form>
         </div>
       </div>
     );
   }
-}
+};

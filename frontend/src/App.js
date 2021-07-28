@@ -7,6 +7,7 @@ import AuthService from "./services/auth.service";
 import UserService from "./services/user.service";
 
 import Login from "./components/login.component";
+import ResetPassword from "./components/reset-password-page";
 import Home from "./components/home.component";
 import BoardAdmin from "./components/board-admin.component";
 import BoardIndexesComponent from "./components/board.indexes.component"
@@ -35,8 +36,11 @@ class App extends Component {
           isAdmin: response.data.roles.includes("admin"),
         });
       })
-      .catch(err => {
-        this.logOut();
+      .catch(error => {
+        console.log(error)
+        // if () {
+        //   this.logOut();
+        // }
       })
   }
 
@@ -105,6 +109,7 @@ class App extends Component {
           <Switch>
             <Route exact path={["/", "/upload"]} component={Home} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/reset-password" component={ResetPassword} />
             <Route path="/admin" component={BoardAdmin} />
             <Route path="/indexes" component={BoardIndexesComponent} />
           </Switch>

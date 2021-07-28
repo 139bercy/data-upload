@@ -4,7 +4,12 @@ import authHeader from './auth-header';
 export default function setupInterceptors(history) {
   // Gestion de l'ajout du header d'authentification
   axios.interceptors.request.use(request => {
-    if (request.url !== '/login' && request.url !== '/api/auth/signin') {
+    if (
+      request.url !== '/login' && request.url !== '/api/auth/signin'
+      &&
+      request.url !== '/reset-password' && request.url !== '/api/auth/reset-password'
+    ) {
+      console.log(request.url)
       const authHeaders = authHeader()
       if (Object.keys(authHeaders).length === 0) {
         history.push('/login');
