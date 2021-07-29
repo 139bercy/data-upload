@@ -12,7 +12,7 @@ passport.use(
         const currentUser = await User.findOne({ where: { username } });
         if (!currentUser) { return done(null, false); }
         const valid = await currentUser.validPassword(password);
-        console.log(valid);
+        console.log('valid', valid);
         if (!valid) { return done(null, false); }
         console.log(currentUser, valid)
         return done(null, currentUser);

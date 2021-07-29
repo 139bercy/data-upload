@@ -34,6 +34,10 @@ class AuthService {
   resetPassword(email) {
     return axios.post(API_URL + "reset-password", {email: email});
   }
+
+  resetPasswordEnd(password, token) {
+    return axios.post(API_URL + "reset-password/" + token, {password: password});
+  }
 }
 
 export default new AuthService();

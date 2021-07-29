@@ -1,7 +1,6 @@
 const express = require("express");
 const morgan = require('morgan');
 const passport = require('passport');
-const bodyParser = require("body-parser");
 // const session = require('express-session');
 const fileUpload = require('express-fileupload');
 
@@ -15,7 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(passport.initialize());
-require('./app/config/passport');
+require('./app/config/passport.config');
 
 
 app.use(fileUpload({

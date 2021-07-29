@@ -36,7 +36,7 @@ module.exports = (sequelize) => {
       validate: {
         isString(value) {
           if (passwordValidation && !schemaPasswordValidation.validate(value)) {
-             throw new Error("Le mot de passe n'est pas suffisamment sécurisé!");
+             throw new Error("Le mot de passe n'est pas suffisamment sécurisé !");
           }
         }
       }
@@ -47,15 +47,15 @@ module.exports = (sequelize) => {
     },
     resetPasswordToken: {
       type: Sequelize.STRING,
-      get() {
-        return () => this.getDataValue('resetPasswordToken')
-      }
+      // get() {
+      //   return () => this.getDataValue('resetPasswordToken')
+      // }
     },
     resetPasswordExpires: {
       type: Sequelize.DATE,
-      get() {
-        return () => this.getDataValue('resetPasswordExpires')
-      }
+      // get() {
+      //   return () => this.getDataValue('resetPasswordExpires')
+      // }
     }
   });
 
@@ -64,7 +64,7 @@ module.exports = (sequelize) => {
   };
 
   User.addHook('beforeSave', 'encryptPassword', async (user) => {
-    if (user.password) {
+    if (user.password && user.changed('password')) {
       const hashedPassword = await bcrypt.hash(user.password, 10);
       user.password = hashedPassword;
     }

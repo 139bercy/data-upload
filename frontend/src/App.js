@@ -8,6 +8,7 @@ import UserService from "./services/user.service";
 
 import Login from "./components/login.component";
 import ResetPassword from "./components/reset-password-page";
+import ResetPasswordEnd from "./components/reset-password-end-page";
 import Home from "./components/home.component";
 import BoardAdmin from "./components/board-admin.component";
 import BoardIndexesComponent from "./components/board.indexes.component"
@@ -27,21 +28,19 @@ class App extends Component {
 
   componentDidMount() {
     const user = AuthService.getCurrentUser();
-
-    UserService.getUser(user ?? {username: 'notloggedin'})
-      .then((response) => {
-        this.setState({
-          currentUser: response.data,
-          isModerator: response.data.roles.includes("moderator"),
-          isAdmin: response.data.roles.includes("admin"),
-        });
-      })
-      .catch(error => {
-        console.log(error)
-        // if () {
-        //   this.logOut();
-        // }
-      })
+    if (user) {
+      UserService.getUser(user)
+        .then((response) => {
+          this.setState({
+            currentUser: response.data,
+            isModerator: response.data.roles.includes("moderator"),
+            isAdmin: response.data.roles.includes("admin"),
+          });
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    }
   }
 
   logOut() {
@@ -110,6 +109,7 @@ class App extends Component {
             <Route exact path={["/", "/upload"]} component={Home} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/reset-password" component={ResetPassword} />
+            <Route path="/reset-password/:token" component={ResetPasswordEnd} />
             <Route path="/admin" component={BoardAdmin} />
             <Route path="/indexes" component={BoardIndexesComponent} />
           </Switch>
