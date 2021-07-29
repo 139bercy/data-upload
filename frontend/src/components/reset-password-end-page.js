@@ -114,9 +114,9 @@ export default class ResetPasswordEnd extends Component {
             <div className="form-group">
               <label htmlFor="password">Nouveau mot de passe :</label>
               <Input
-                type="text"
+                type="password"
                 className="form-control"
-                name="email"
+                name="password"
                 value={this.state.password}
                 onChange={this.onChangePassword}
                 validations={[required]}
@@ -124,11 +124,11 @@ export default class ResetPasswordEnd extends Component {
             </div>
 
             <div className="form-group">
-              <label htmlFor="password">Nouveau mot de passe :</label>
+              <label htmlFor="password2">Nouveau mot de passe :</label>
               <Input
-                type="text"
+                type="password"
                 className="form-control"
-                name="email"
+                name="password2"
                 value={this.state.password2}
                 onChange={this.onChangePassword2}
                 validations={[required, isSame(() => this.state.password)]}

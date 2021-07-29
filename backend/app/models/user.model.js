@@ -30,9 +30,12 @@ module.exports = (sequelize) => {
     },
     password: {
       type: Sequelize.STRING,
-      // get() {
-      //   return () => this.getDataValue('password')
-      // },
+      get() {
+        return () => this.getDataValue('password')
+      },
+      set(value) {
+        this.setDataValue('password', value);
+      },
       validate: {
         isString(value) {
           if (passwordValidation && !schemaPasswordValidation.validate(value)) {
@@ -47,26 +50,32 @@ module.exports = (sequelize) => {
     },
     resetPasswordToken: {
       type: Sequelize.STRING,
-      // get() {
-      //   return () => this.getDataValue('resetPasswordToken')
-      // }
+      get() {
+        return () => this.getDataValue('resetPasswordToken')
+      },
+      set(value) {
+        this.setDataValue('resetPasswordToken', value);
+      },
     },
     resetPasswordExpires: {
       type: Sequelize.DATE,
-      // get() {
-      //   return () => this.getDataValue('resetPasswordExpires')
-      // }
+      get() {
+        return () => this.getDataValue('resetPasswordExpires')
+      },
+      set(value) {
+        this.setDataValue('resetPasswordExpires', value);
+      },
     }
   });
 
   User.prototype.validPassword = async function validPassword(password) {
-    return await bcrypt.compare(password, this.password)
+    return await bcrypt.compare(password, this.password())
   };
 
   User.addHook('beforeSave', 'encryptPassword', async (user) => {
-    if (user.password && user.changed('password')) {
-      const hashedPassword = await bcrypt.hash(user.password, 10);
-      user.password = hashedPassword;
+    if (user.password() && user.changed('password')) {
+      const hashedPassword = await bcrypt.hash(user.password(), 10);
+      user.password(hashedPassword);
     }
   });
 

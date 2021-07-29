@@ -12,7 +12,7 @@ function onEnableUserChange(user) {
     const oldEnable = user.enable;
     user.enable = !user.enable;
     try {
-      return UserService.updateUser(user);
+      return await UserService.updateUser({username: user.username, enable: user.enable});
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -25,8 +25,9 @@ function onRolesUserChange(user) {
   return async (event) => {
     const oldRoles = user.roles;
     user.roles = defineRoles(event.target.value);
+    console.log(user.roles)
     try {
-      return UserService.updateUser(user);
+      return await UserService.updateUser({username: user.username, roles: user.roles});
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -46,6 +47,7 @@ function selectRole(roles) {
   if (roles.includes(rolesList.user)) {
     return rolesList.user;
   }
+  return roles
 }
 
 function defineRoles(role) {

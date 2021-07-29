@@ -16,7 +16,7 @@ async function mapRoles(user) {
 
 async function setRoles(user, roles) {
   console.log(roles)
-  await user.setRoles(await Role.findOne({where: {name: {[Op.in]: roles}}}));
+  await user.setRoles(roles);
   return user;
 }
 
@@ -99,7 +99,10 @@ exports.updateUser = async (req, res) => {
   let user = await User.findOne(options);
   if (user) {
     user = await user.update(req.body);
-    await setRoles(user, req.body.roles);
+    // Seul un admin peut changer le role d'un utilisateur
+    if (roles.includes('admin')) {
+      await setRoles(user, req.body.roles);
+    }
     sendUser(200, user, res);
   }
 };
@@ -120,7 +123,14 @@ async function handleManager(currentUsername, user) {
 exports.createUser = async (req, res) => {
   userData = await handleManager(req.user.username, req.body)
   let user = await User.create(userData)
-  await setRoles(user, req.body.roles);
+  let roles = await req.user.getRoles();
+  roles = roles.map(r => r.name)
+  // Seul un admin peut spécifier un role autre que user
+  if (roles.includes('admin')) {
+    await setRoles(user, req.body.roles);
+  } else {
+    await setRoles(user, ['user']);
+  }
   await setManager(user, userData.manager);
   sendUser(201, user, res);
 };

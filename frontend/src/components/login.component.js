@@ -60,13 +60,10 @@ export default class Login extends Component {
           window.location.reload();
         },
         error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-
+          let resMessage = "Une erreur inconnue est survenue. Veuillez contacter le support."
+          if (error.response && error.response.status === 401) {
+            resMessage = "Nom d'utilisateur ou mot de passe invalide. Veuillez réessayer !"
+          }
           this.setState({
             loading: false,
             message: resMessage
