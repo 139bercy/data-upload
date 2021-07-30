@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
@@ -59,13 +60,10 @@ export default class Login extends Component {
           window.location.reload();
         },
         error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-
+          let resMessage = "Une erreur inconnue est survenue. Veuillez contacter le support."
+          if (error.response && error.response.status === 401) {
+            resMessage = "Nom d'utilisateur ou mot de passe invalide. Veuillez réessayer !"
+          }
           this.setState({
             loading: false,
             message: resMessage
@@ -145,6 +143,12 @@ export default class Login extends Component {
               }}
             />
           </Form>
+
+          <div className="container" style={{'textAlign': 'center'}}>
+            <Link to={"/reset-password"} className="nav-link">
+              Mot de passe oublié
+            </Link>
+          </div>
         </div>
       </div>
     );

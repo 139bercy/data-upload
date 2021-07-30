@@ -1,3 +1,3 @@
 module.exports = (db) => {
-    db.user.belongsTo(db.user, {as: 'manager'});
+    db.User.belongsTo(db.User, {as: 'manager'});
 };

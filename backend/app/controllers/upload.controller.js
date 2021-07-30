@@ -1,6 +1,4 @@
-const db = require("../models");
-
-const Index = db.index;
+const { Index } = require("../models");
 
 exports.upload = async function (req, res) {
 
