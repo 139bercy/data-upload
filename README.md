@@ -94,11 +94,6 @@ Pour tout autres installation la documentation se retrouve sur le site de docker
 
 Plusieurs scripts sont intégrés dans le projet afin de pouvoir lancer l'application.
 
-Pour commencer, installez les dépendances pour npm dans docker :
-```sh
-bash npm-install.sh
-```
-
 Dans un premier temps, vous devez démarrer l'application :
 ```sh
 bash start.sh
@@ -111,7 +106,7 @@ bash reset.sh
 
 Si vous avez de nouvelle dépendances dans votre `package.json` du dossier `backend` ou `frontend`, je vous invite à relancer la commande suivante :
 ```sh
-bash install-dependencies.sh
+bash npm-install.sh
 ```
 Cette commande doit aussi être lancé lors de la récupération du projet.
 
@@ -139,7 +134,7 @@ Vous pouvez aussi utiliser en plus l'option `-f` :
 bash logs.sh -f <nom du service>
 ```
 
-Cette option permet de rafraichir dynamiquement les logs afin de les visualiser en continue.
+Cette option permet de rafraîchir dynamiquement les logs afin de les visualiser en continue.
 
 ### Annexes
 ### postgresql

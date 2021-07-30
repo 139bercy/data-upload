@@ -1,7 +1,14 @@
 const { Index } = require("../models");
 
-exports.findAll = async (_, res) => {
-  let indexes = await Index.findAll();
+exports.findAll = async (req, res) => {
+  let roles = await req.user.getRoles();
+  roles = roles.map(r => r.name)
+  let indexes = [];
+  if (roles.includes('admin')) {
+    indexes = await Index.findAll() ?? [];
+  } else {
+    indexes = await req.user.getIndexes() ?? [];
+  }
   res.json(indexes);
 };
 

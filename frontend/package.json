@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.21.1",
     "bootstrap": "^4.4.1",
+    "multiselect-react-dropdown": "^2.0.4",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-dropzone": "^11.3.2",

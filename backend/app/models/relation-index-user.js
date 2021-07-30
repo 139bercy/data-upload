@@ -3,6 +3,6 @@ module.exports = (db) => {
     through: "user_indexes",
   });
   db.User.belongsToMany(db.Index, {
-    through: "user_indexes",
+    through: "user_indexes", as: 'indexes'
   });
 };
