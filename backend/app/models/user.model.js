@@ -34,10 +34,12 @@ module.exports = (sequelize) => {
         return () => this.getDataValue('password')
       },
       set(value) {
-        this.setDataValue('password', value);
+        // async/await or promise seems to not work here so we use the Sync alternative
+        const hashedPassword = bcrypt.hashSync(value, 10);
+        this.setDataValue('password', hashedPassword);
       },
       validate: {
-        isString(value) {
+        isStrongEnough(value) {
           if (passwordValidation && !schemaPasswordValidation.validate(value)) {
              throw new Error("Le mot de passe n'est pas suffisamment sécurisé !");
           }
@@ -71,13 +73,6 @@ module.exports = (sequelize) => {
   User.prototype.validPassword = async function validPassword(password) {
     return await bcrypt.compare(password, this.password())
   };
-
-  User.addHook('beforeSave', 'encryptPassword', async (user) => {
-    if (user.password() && user.changed('password')) {
-      const hashedPassword = await bcrypt.hash(user.password(), 10);
-      user.password(hashedPassword);
-    }
-  });
 
   return User;
 };

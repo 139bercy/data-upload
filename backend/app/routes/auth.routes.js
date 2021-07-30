@@ -58,8 +58,8 @@ router.post("/reset-password",
         const token = uuid.v4() + uuid.v4()+ uuid.v4();
         var urlToken = req.protocol + '://' + req.get('host') + `/reset-password/${token}`;
         // TODO register token and expiration date
-        user.resetPasswordToken(token);
-        user.resetPasswordExpires(moment().add(ttl));
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = moment().add(ttl);
         await user.save()
         await transporter.sendMail({
           from: mailerConfig.mailSender,
@@ -87,9 +87,9 @@ router.post("/reset-password/:token",
   async (req, res) => {
     const user = await User.findOne({ where: { resetPasswordToken: req.params.token } });
     if (user && moment(user.resetPasswordExpires()).isAfter(moment())) {
-      user.password(req.body.password)
-      user.resetPasswordToken(null)
-      user.resetPasswordExpires(null)
+      user.password = req.body.password;
+      user.resetPasswordToken = null
+      user.resetPasswordExpires = null
       try {
         await user.save()
       } catch (error) {
