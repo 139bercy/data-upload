@@ -151,9 +151,11 @@ async function sendUser(status, user, res) {
 }
 
 async function serializeUser(user) {
-  return {
-    ...user.toJSON(),
-    roles: await getRoles(user),
-    indexes: (await getIndexes(user) ?? [])
+  if (user) {
+    return {
+      ...user.toJSON(),
+      roles: await getRoles(user),
+      indexes: (await getIndexes(user) ?? [])
+    }
   }
 }

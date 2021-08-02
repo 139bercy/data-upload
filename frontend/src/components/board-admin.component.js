@@ -3,6 +3,7 @@ import Multiselect from 'multiselect-react-dropdown';
 
 import UserService from "../services/user.service";
 import IndexesService from "../services/indexes.service";
+import RolesService from "../services/roles.service";
 import Table from "./table-component";
 
 
@@ -27,7 +28,6 @@ function onRolesUserChange(user) {
   return async (event) => {
     const oldRoles = user.roles;
     user.roles = defineRoles(event.target.value);
-    console.log(user.roles)
     try {
       return await UserService.updateUser({username: user.username, roles: user.roles});
     } catch (error) {
@@ -39,7 +39,7 @@ function onRolesUserChange(user) {
 }
 
 function selectRole(roles) {
-  roles = roles.map(role => role.name);
+  // roles = roles.map(role => role.name);
   if (roles.includes(rolesList.admin)) {
     return rolesList.admin;
   }
@@ -67,31 +67,32 @@ function defineRoles(role) {
 }
 
 function selectIndexes(selectedIndexesNames, indexes) {
-  console.log(selectedIndexesNames, indexes);
   if (selectedIndexesNames) {
   return indexes.filter(index => selectedIndexesNames.includes(index.name))
   }
   return []
 }
 
-function onSelectIndex(user) {
-  return async (selectedList, selectedItem) => {
+function onSelectIndex(user, shouldAlwaysUpdate = true) {
+  return async (_, selectedItem) => {
     if (!user.indexes) {
       user.indexes = []
     }
     user.indexes.push(selectedItem);
-    try {
-      return await UserService.updateUser({username: user.username, indexes: user.indexes});
-    } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
-      user.indexes = user.indexes.filter(index => index !== selectedItem);
+    if (shouldAlwaysUpdate) {
+      try {
+        return await UserService.updateUser({username: user.username, indexes: user.indexes});
+      } catch (error) {
+        console.log(error);
+        alert(error.response.data.message);
+        user.indexes = user.indexes.filter(index => index !== selectedItem);
+      }
     }
   }
 }
 
 function onRemoveIndex(user) {
-  return async (selectedList, removedItem) => {
+  return async (_, removedItem) => {
     if (!user.indexes) {
       user.indexes = []
     }
@@ -106,8 +107,8 @@ function onRemoveIndex(user) {
   }
 }
 
-function roleOptionTemplate(_) {
-  return Object.values(rolesList).map(role => (
+function roleOptionTemplate(roles) {
+  return roles.map(role => (
       <option key={role} value={role}>{rolesTrad[role]}</option>
     )
   )
@@ -124,7 +125,7 @@ export default class BoardAdmin extends Component {
         email: "",
         roles: [rolesList.user]
       },
-      roles : [],
+      roles : [rolesList.user],
       indexes: []
     };
 
@@ -150,7 +151,7 @@ export default class BoardAdmin extends Component {
         Cell: cell => (
           <div>
             <select onChange={onRolesUserChange(cell.row.values)} defaultValue={selectRole(cell.row.values.roles)}>
-              {roleOptionTemplate(cell)}
+              {roleOptionTemplate(this.state.roles)}
             </select>
           </div>
         )
@@ -200,12 +201,12 @@ export default class BoardAdmin extends Component {
       }*/
     ];
 
-  componentDidMount() {
+  async componentDidMount() {
     if (this.state.users.length === 0) {
-      this.refreshUserList();
+      await this.refreshUserList();
     }
-    this.getRolesList();
-    this.getIndexesList();
+    await this.getRolesList();
+    await this.getIndexesList();
   }
 
   defineUsername = (event) => {
@@ -263,9 +264,9 @@ export default class BoardAdmin extends Component {
   }
 
   async getRolesList() {
+    let { data } = await RolesService.getAll()
     this.setState(() => ({
-      // TODO if not admin then only user inside the list !
-      roles: rolesList
+      roles: data
     }))
   }
 
@@ -309,17 +310,17 @@ export default class BoardAdmin extends Component {
               <td>
                 <div>
                   <select onChange={this.setRoles}>
-                    {roleOptionTemplate()}
+                    {roleOptionTemplate(this.state.roles)}
                   </select>
                 </div>
               </td>
               <td>
                 <div>
                   <Multiselect
-                    options={this.state.options} // Options to display in the dropdown
+                    options={this.state.indexes} // Options to display in the dropdown
                     selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
-                    onSelect={this.onSelect} // Function will trigger on select event
-                    onRemove={this.onRemove} // Function will trigger on remove event
+                    onSelect={onSelectIndex(this.state.newUser, false)} // Function will trigger on select event
+                    onRemove={onRemoveIndex(this.state.newUser, false)} // Function will trigger on remove event
                     displayValue="name" // Property name to display in the dropdown options
                   />
                 </div>
