@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import Multiselect from 'multiselect-react-dropdown';
 
 import UserService from "../services/user.service";
+import IndexesService from "../services/indexes.service";
+import RolesService from "../services/roles.service";
 import Table from "./table-component";
 
 
@@ -25,7 +28,6 @@ function onRolesUserChange(user) {
   return async (event) => {
     const oldRoles = user.roles;
     user.roles = defineRoles(event.target.value);
-    console.log(user.roles)
     try {
       return await UserService.updateUser({username: user.username, roles: user.roles});
     } catch (error) {
@@ -37,7 +39,7 @@ function onRolesUserChange(user) {
 }
 
 function selectRole(roles) {
-  roles = roles.map(role => role.name);
+  // roles = roles.map(role => role.name);
   if (roles.includes(rolesList.admin)) {
     return rolesList.admin;
   }
@@ -64,8 +66,49 @@ function defineRoles(role) {
   return roles;
 }
 
-function roleOptionTemplate(_) {
-  return Object.values(rolesList).map(role => (
+function selectIndexes(selectedIndexesNames, indexes) {
+  if (selectedIndexesNames) {
+  return indexes.filter(index => selectedIndexesNames.includes(index.name))
+  }
+  return []
+}
+
+function onSelectIndex(user, shouldAlwaysUpdate = true) {
+  return async (_, selectedItem) => {
+    if (!user.indexes) {
+      user.indexes = []
+    }
+    user.indexes.push(selectedItem);
+    if (shouldAlwaysUpdate) {
+      try {
+        return await UserService.updateUser({username: user.username, indexes: user.indexes});
+      } catch (error) {
+        console.log(error);
+        alert(error.response.data.message);
+        user.indexes = user.indexes.filter(index => index !== selectedItem);
+      }
+    }
+  }
+}
+
+function onRemoveIndex(user) {
+  return async (_, removedItem) => {
+    if (!user.indexes) {
+      user.indexes = []
+    }
+    user.indexes = user.indexes.filter(index => index !== removedItem);
+    try {
+      return await UserService.updateUser({username: user.username, indexes: user.indexes});
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.message);
+      user.indexes.push(removedItem);
+    }
+  }
+}
+
+function roleOptionTemplate(roles) {
+  return roles.map(role => (
       <option key={role} value={role}>{rolesTrad[role]}</option>
     )
   )
@@ -81,7 +124,9 @@ export default class BoardAdmin extends Component {
         username: "",
         email: "",
         roles: [rolesList.user]
-      }
+      },
+      roles : [rolesList.user],
+      indexes: []
     };
 
     this.handleSubmit.bind(this);
@@ -106,7 +151,7 @@ export default class BoardAdmin extends Component {
         Cell: cell => (
           <div>
             <select onChange={onRolesUserChange(cell.row.values)} defaultValue={selectRole(cell.row.values.roles)}>
-              {roleOptionTemplate(cell)}
+              {roleOptionTemplate(this.state.roles)}
             </select>
           </div>
         )
@@ -122,6 +167,20 @@ export default class BoardAdmin extends Component {
               onChange={onEnableUserChange(cell.row.values)}
             />
           </label>
+        )
+      },
+      {
+        Header: "Indexes",
+        accessor: 'indexes',
+        Cell: cell => (
+          /*cell.row.values.roles.includes("admin") || */
+          <Multiselect
+            options={this.state.indexes} // Options to display in the dropdown
+            selectedValues={selectIndexes(cell.row.values.indexes, this.state.indexes)} // Preselected value to persist in dropdown
+            onSelect={onSelectIndex(cell.row.values)} // Function will trigger on select event
+            onRemove={onRemoveIndex(cell.row.values)} // Function will trigger on remove event
+            displayValue="name" // Property name to display in the dropdown options
+          />
         )
       },
       {
@@ -142,10 +201,12 @@ export default class BoardAdmin extends Component {
       }*/
     ];
 
-  componentDidMount() {
+  async componentDidMount() {
     if (this.state.users.length === 0) {
-      this.refreshUserList();
+      await this.refreshUserList();
     }
+    await this.getRolesList();
+    await this.getIndexesList();
   }
 
   defineUsername = (event) => {
@@ -202,6 +263,23 @@ export default class BoardAdmin extends Component {
     }))
   }
 
+  async getRolesList() {
+    let { data } = await RolesService.getAll()
+    this.setState(() => ({
+      roles: data
+    }))
+  }
+
+  async getIndexesList() {
+    this.setState(() => ({
+      indexes: []
+    }))
+    let { data } = await IndexesService.getAll()
+    this.setState(() => ({
+      indexes: data
+    }))
+  }
+
   async deleteUser(user) {
     await UserService.deleteUser(user)
     this.refreshUserList();
@@ -220,6 +298,7 @@ export default class BoardAdmin extends Component {
               <th>Nom d'utilisateur</th>
               <th>Email</th>
               <th>Roles</th>
+              <th>Indexes</th>
             </tr>
             </thead>
             <tbody>
@@ -231,8 +310,19 @@ export default class BoardAdmin extends Component {
               <td>
                 <div>
                   <select onChange={this.setRoles}>
-                    {roleOptionTemplate()}
+                    {roleOptionTemplate(this.state.roles)}
                   </select>
+                </div>
+              </td>
+              <td>
+                <div>
+                  <Multiselect
+                    options={this.state.indexes} // Options to display in the dropdown
+                    selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
+                    onSelect={onSelectIndex(this.state.newUser, false)} // Function will trigger on select event
+                    onRemove={onRemoveIndex(this.state.newUser, false)} // Function will trigger on remove event
+                    displayValue="name" // Property name to display in the dropdown options
+                  />
                 </div>
               </td>
               <td>

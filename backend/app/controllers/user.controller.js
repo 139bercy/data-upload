@@ -1,4 +1,3 @@
-const { Op } = require("sequelize");
 const db = require("../models");
 
 const User = db.User;
@@ -7,21 +6,30 @@ const Role = db.Role;
 const userDefaultAttributes = ['username', 'email', 'enable'];
 const roleDefaultAttributes = ['name'];
 
-async function mapRoles(user) {
-  return {
-    ...user.toJSON(),
-    roles: (await user.getRoles()).map(role => role.name)
-  }
+async function getRoles(user) {
+  return (await user.getRoles()).map(role => role.name)
 }
 
 async function setRoles(user, roles) {
-  console.log(roles)
-  await user.setRoles(roles);
+  if (roles) {
+    await user.setRoles(roles);
+  }
   return user;
 }
 
 async function setManager(user, manager) {
   await user.setManager(manager)
+  return user;
+}
+
+async function getIndexes(user) {
+  return (await user.getIndexes()).map(index => index.name)
+}
+
+async function setIndexes(user, indexes) {
+  if (indexes) {
+    await user.setIndexes(indexes.map(index => index.name));
+  }
   return user;
 }
 
@@ -43,7 +51,7 @@ exports.findAllUsers = async (req, res) => {
   }
 
   users = await User.findAll(request);
-  await users.map(async user => { return await mapRoles(user)});
+  users = await Promise.all(users.map(async user => await serializeUser(user)));
   res.json(users);
 };
 
@@ -99,6 +107,7 @@ exports.updateUser = async (req, res) => {
   let user = await User.findOne(options);
   if (user) {
     user = await user.update(req.body);
+    await setIndexes(user, req.body.indexes);
     // Seul un admin peut changer le role d'un utilisateur
     if (roles.includes('admin')) {
       await setRoles(user, req.body.roles);
@@ -131,13 +140,22 @@ exports.createUser = async (req, res) => {
   } else {
     await setRoles(user, ['user']);
   }
+  await setIndexes(user, req.body.indexes);
   await setManager(user, userData.manager);
   sendUser(201, user, res);
 };
 
 
 async function sendUser(status, user, res) {
+  res.status(status).json(await serializeUser(user));
+}
 
-  user = await mapRoles(user);
-  res.status(status).json(user);
+async function serializeUser(user) {
+  if (user) {
+    return {
+      ...user.toJSON(),
+      roles: await getRoles(user),
+      indexes: (await getIndexes(user) ?? [])
+    }
+  }
 }

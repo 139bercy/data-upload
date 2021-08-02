@@ -27,6 +27,7 @@ app.use('/api/auth', require('./app/routes/auth.routes'));
 app.use('/api/users', require('./app/routes/user.routes'));
 app.use('/api/upload', require('./app/routes/upload.routes'));
 app.use('/api/indexes', require('./app/routes/index.routes'));
+app.use('/api/roles', require('./app/routes/roles.routes'));
 
 app.use(morgan('dev'));
 
