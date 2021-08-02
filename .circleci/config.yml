@@ -32,9 +32,12 @@ jobs:
               name: construction des images
               command: |
                   ./scripts/prod/build.sh
+          - run:
+              name: Compress Artifacts
+              command: tar -cvzf deploy.tar.gz ./deploy
+
           - store_artifacts:
-              path: ./deploy
-              destination: deploy
+              path: ./deploy.tar.gz
 
 workflows:
     version: 2
