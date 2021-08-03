@@ -1,0 +1,47 @@
+---
+version: 2
+jobs:
+    build-images:
+      docker:
+          - image: docker:dind
+      steps:
+          - checkout
+          # - run:
+          #     name: Installation des dépendances système
+          #     command: |
+          #         apk add --no-cache git
+          # - run:
+          #     name: Condition pour les branches
+          #     command: |
+          #           if [ "$CIRCLE_BRANCH" != "master" ]; then
+          #               if [ $(git diff --name-only master..${CIRCLE_BRANCH} | grep "sources/metadata.json" | wc -l) = 0 ]; then
+          #                 commit_id_head=$(git log -n1 --format=format:"%H")
+          #                 commit_id_head1=$(git log -n2 --format=format:"%H" | tail -1)
+          #                 if [ $(git diff --name-only ${commit_id_head1} ${commit_id_head} | grep "sources/metadata.json" | wc -l) = 0 ]; then
+          #                   circleci-agent step halt
+          #                 fi
+          #               fi
+          #           fi
+          - run: date +%F > date
+          - run:
+              name: Installation des dépendances système
+              command: |
+                  apk add --no-cache docker-compose bash
+          - setup_remote_docker
+          - run:
+              name: construction des images
+              command: |
+                  ./scripts/prod/build.sh
+          - run:
+              name: Compress Artifacts
+              command: tar -cvzf deploy.tar.gz ./deploy
+
+          - store_artifacts:
+              path: ./deploy.tar.gz
+
+workflows:
+    version: 2
+
+    dev:
+      jobs:
+        - build-images
