@@ -4,6 +4,7 @@ const JWTstrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
 
 const { User } = require('../models');
+const { secret } = require('./auth.config');
 
 passport.use(
   new LocalStrategy(
@@ -25,7 +26,7 @@ passport.use(
 
 passport.use(
   new JWTstrategy({
-    secretOrKey: process.env['SECRET'] ?? "my-secret",
+    secretOrKey: secret,
     jwtFromRequest: ExtractJWT.fromHeader('x-access-token'),
   }, async (token, done) => {
     try {

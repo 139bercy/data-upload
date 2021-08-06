@@ -14,22 +14,14 @@ services:
       - postgres_data:/var/lib/postgresql
 
   postgress-initialisation:
-    image: postgres:13-alpine
     environment:
       PGHOST: postgres
       PGUSER: admin
       PGPASSWORD: admin
       SECRET: 'my-secret'
     command: psql -c "CREATE DATABASE testdb"
-    depends_on:
-      postgres:
-        condition: service_healthy
 
   backend:
-    image: backend:dev
-    build:
-      context: backend/
-      dockerfile: Dockerfile
     volumes:
       - ./backend:/src/app
       - ./backend/storage:/storage
@@ -60,9 +52,6 @@ services:
       - ./frontend/:/src/app/
 
   nginx-frontend:
-    image: nginx:dev
-    ports:
-      - 80:80
     volumes:
       - ./nginx/nginx-headers.conf:/etc/nginx/general-security-headers.conf
       - ./nginx/site.dev.conf:/etc/nginx/conf.d/default.conf
