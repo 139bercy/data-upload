@@ -59,7 +59,7 @@ async function resetDatabase(User, Role, Index) {
     path: "data-360/DGF/MIS2"
   });
   if (typeof process.env['ADMIN_USERNAME'] == 'string' && typeof process.env['ADMIN_EMAIL'] == 'string' && typeof process.env['ADMIN_PASSWORD'] == 'string') {
-    console.log('Création du compte admin depuis les variables d\'environnement fournies');
+    console.log('Création du compte admin depuis les variables d\'environnement fournies :', process.env['ADMIN_EMAIL']);
     User.create({
       id: 1,
       username: process.env['ADMIN_USERNAME'],

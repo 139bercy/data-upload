@@ -3,13 +3,16 @@ const LocalStrategy = require('passport-local');
 const JWTstrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
 
+const { Op } = require("sequelize");
+
 const { User } = require('../models');
 
 passport.use(
   new LocalStrategy(
     async (username, password, done) => {
       try {
-        const currentUser = await User.findOne({ where: { username } });
+        // On accepte les connexions avec le username OU avec l'email
+        const currentUser = await User.findOne({ where: { [Op.or]: [ {username}, {email: username} ] } });
         if (!currentUser) { return done(null, false); }
         const valid = await currentUser.validPassword(password);
         console.log('valid', valid, await currentUser.validPassword(password));
