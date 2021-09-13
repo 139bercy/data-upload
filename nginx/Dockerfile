@@ -16,6 +16,7 @@ RUN npm install react-scripts@3.4.1 -g --silent
 # add app
 COPY frontend/ /src/app
 
+ARG PUBLIC_URL
 RUN npm run build
 
 # Create the container from the alpine linux image

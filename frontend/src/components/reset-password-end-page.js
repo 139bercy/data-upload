@@ -85,7 +85,7 @@ export default class ResetPasswordEnd extends Component {
       } else if (error.response.status === 406) {
         this.setState({
           loading: false,
-          message: error.response.data[0] + "\nTOTO"
+          message: error.response.data[0]
         })
       } else {
         this.setState({
@@ -100,7 +100,7 @@ export default class ResetPasswordEnd extends Component {
       <div className="col-md-12">
         <div className="card card-container">
           <img
-            src="/marianne.svg"
+            src="marianne.svg"
             alt="profile-img"
             className="profile-img-card"
           />

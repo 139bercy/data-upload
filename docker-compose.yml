@@ -57,12 +57,15 @@ services:
       ADMIN_EMAIL: ${ADMIN_EMAIL}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       PORT: ${PORT}
+      PUBLIC_URL: ${PUBLIC_URL}
 
   nginx-frontend:
     image: data-upload-nginx-frontend:prod
     build:
       context: .
       dockerfile: nginx/Dockerfile
+      args:
+        - PUBLIC_URL=${PUBLIC_URL}
     ports:
       - 80:80
       - 443:443
@@ -71,6 +74,8 @@ services:
       SERVER_HOSTNAME: ${SERVER_HOSTNAME}
       SSL_CERTIFICATE: ${SSL_CERTIFICATE}
       BACKEND_HOST: ${BACKEND_HOST}
+      LISTEN: ${LISTEN:-443 ssl}
+      PUBLIC_URL: ${PUBLIC_URL}
 
 volumes:
   postgres_data:

@@ -6,7 +6,7 @@ class UploadFilesService {
 
         formData.append("file", file);
 
-        return request.post("http://localhost/api/upload").attach("dropzone", formData);
+        return request.post("/api/upload").attach("dropzone", formData);
     }
 }
 
