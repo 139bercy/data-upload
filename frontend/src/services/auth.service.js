@@ -6,8 +6,8 @@ class AuthService {
   async login(username, password) {
     const response = await axios
       .post(API_URL + "signin", {
-        username,
-        password
+        username: username,
+        password: password
       });
     if (response.data.accessToken) {
       localStorage.setItem("user", JSON.stringify(response.data));

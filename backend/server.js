@@ -21,13 +21,15 @@ app.use(fileUpload({
   createParentPath: true
 }));
 
-
 // set routes
-app.use('/api/auth', require('./app/routes/auth.routes'));
-app.use('/api/users', require('./app/routes/user.routes'));
-app.use('/api/upload', require('./app/routes/upload.routes'));
-app.use('/api/indexes', require('./app/routes/index.routes'));
-app.use('/api/roles', require('./app/routes/roles.routes'));
+const router = require('express').Router();
+router.use('/api/auth', require('./app/routes/auth.routes'));
+router.use('/api/users', require('./app/routes/user.routes'));
+router.use('/api/upload', require('./app/routes/upload.routes'));
+router.use('/api/indexes', require('./app/routes/index.routes'));
+router.use('/api/roles', require('./app/routes/roles.routes'));
+
+app.use(process.env.PUBLIC_URL, router)
 
 app.use(morgan('dev'));
 

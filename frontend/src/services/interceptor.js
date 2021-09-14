@@ -1,18 +1,24 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
-function shouldBeLoggedIn(url) {
-  return url !== '/login' && url !== '/api/auth/signin'
+function completeUrl(url) {
+  return process.env.PUBLIC_URL + url;
+}
+
+function shouldBeLoggedIn(request) {
+  const url = request.url
+  console.log(request)
+  return url !== completeUrl('/login') && url !== completeUrl('/api/auth/signin')
   &&
-  url !== '/reset-password' && url !== '/api/auth/reset-password'
+  url !== completeUrl('/reset-password') && url !== completeUrl('/api/auth/reset-password')
   &&
-  !url.startsWith('/reset-password/') && !url.startsWith('/api/auth/reset-password/')
+  !url.startsWith(completeUrl('/reset-password/')) && !url.startsWith(completeUrl('/api/auth/reset-password/'))
 }
 
 export default function setupInterceptors(history) {
   // Gestion de l'ajout du header d'authentification
   axios.interceptors.request.use(request => {
-    if (shouldBeLoggedIn(request.url)) {
+    if (shouldBeLoggedIn(request)) {
       const authHeaders = authHeader()
       if (!authHeader || Object.keys(authHeaders).length === 0) {
         history.push('/login');
@@ -26,7 +32,8 @@ export default function setupInterceptors(history) {
   axios.interceptors.response.use(response => {
     return response;
   }, error => {
-    if (error.response && shouldBeLoggedIn(error.config.url)) {
+    // console.log(error, error.config)
+    if (error.response && shouldBeLoggedIn(error.config)) {
       if (error.response.status === 401) {
         localStorage.removeItem("user");
         history.push('/login');

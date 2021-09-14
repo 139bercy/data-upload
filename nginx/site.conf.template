@@ -11,23 +11,21 @@ upstream backend {
 }
 
 server {
-
-  # listen      443 ssl;
-  listen      80;
+  listen      $LISTEN;
   server_name $SERVER_HOSTNAME;
 
   $SSL_CERTIFICATE
 
   include /etc/nginx/general-security-headers.conf;
 
-  location = / {
+  location = $PUBLIC_URL/ {
       root   /var/www/html;
       index  index.html index.htm;
       include  /etc/nginx/mime.types;
-      try_files $uri $uri/ /index.html;
+      try_files $uri $uri/ $PUBLIC_URL/index.html;
   }
 
-  location ~ /api {
+  location ~ $PUBLIC_URL/api {
     proxy_pass http://backend;
     proxy_redirect     off;
 
@@ -37,11 +35,11 @@ server {
     proxy_set_header   X-Forwarded-Proto    $scheme;
   }
 
-  location ~ ^/(?!api) {
+  location ~ ^$PUBLIC_URL/(?!api) {
       root   /var/www/html;
       index  index.html index.htm;
       include  /etc/nginx/mime.types;
-      try_files $uri $uri/ /index.html;
+      try_files $uri $uri/ $PUBLIC_URL/index.html;
   }
 
   error_page   500 502 503 504  /50x.html;

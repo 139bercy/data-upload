@@ -28,8 +28,6 @@ let transporter = nodemailer.createTransport({
 router.post("/signin",
   passport.authenticate('local', { session: false }),
   async (req, res) => {
-    console.log('TOTO', req.user);
-
     let user = req.user;
     let roles = await user.getRoles();
     roles = roles.map(role => role.name)
@@ -48,6 +46,7 @@ router.post("/signin",
   }
 );
 
+const demandeResetPasswordDone = "Demande de réinitialisation de mot de passe prise en compte ! Si une demande avait déjà été émise il y a moins de " + moment.duration(ttl).locale("fr").humanize() + " alors il n'y aura pas de nouveau mail de réinitialisation !"
 router.post("/reset-password",
   async (req, res) => {
     email = req.body.email;
@@ -55,30 +54,35 @@ router.post("/reset-password",
       // TODO Find the associated user
       const user = await User.findOne({ where: { email: email } });
       if (user) {
-        const token = uuid.v4() + uuid.v4()+ uuid.v4();
-        var urlToken = req.protocol + '://' + req.get('host') + `/reset-password/${token}`;
-        // TODO register token and expiration date
-        user.resetPasswordToken = token;
-        user.resetPasswordExpires = moment().add(ttl);
-        await user.save()
-        await transporter.sendMail({
-          from: mailerConfig.mailSender,
-          to: req.body.email,
-          subject: "Demande de réinitialisation de mot de passe",
-          html: await Template(
-            {
-              email: email,
-              url: urlToken,
-              date: moment().locale('fr').tz('Europe/Paris').format("DD MMMM yyyy à HH:mm")
-            }, mailerConfig.templateFolder + 'mail/reset-password-email.html')
-        })
-        res.status(200).send({message: "Demande de réinitialisation de mot de passe prise en compte"})
+        if (user.resetPasswordToken && moment(user.resetPasswordExpires).before(moment())) {
+          // Pas d'invitation si une invitation est déjà en cours
+          console.debug('Pas de demande de réinitialisation car une demande est déjà en cours !');
+        } else {
+          const token = uuid.v4() + uuid.v4()+ uuid.v4();
+          var urlToken = req.protocol + '://' + req.get('host') + process.env.PUBLIC_URL + `/reset-password/${token}`;
+          // register token and expiration date
+          user.resetPasswordToken = token;
+          user.resetPasswordExpires = moment().add(ttl);
+          await user.save()
+          await transporter.sendMail({
+            from: mailerConfig.mailSender,
+            to: req.body.email,
+            subject: "Demande de réinitialisation de mot de passe",
+            html: await Template(
+              {
+                email: email,
+                url: urlToken,
+                date: moment().locale('fr').tz('Europe/Paris').format("DD MMMM yyyy à HH:mm")
+              }, mailerConfig.templateFolder + 'mail/reset-password-email.html')
+          })
+        }
+        res.status(200).send({message: demandeResetPasswordDone})
 
       }
     }catch (error) {
       console.log(error);
       // On renvoie un succes pour ne pas aider un attaquant à trouver un compte valide
-      res.status(200).send({message: "Demande de réinitialisation de mot de passe prise en compte"})
+      res.status(200).send({message: demandeResetPasswordDone})
     }
   }
 );
@@ -86,7 +90,7 @@ router.post("/reset-password",
 router.post("/reset-password/:token",
   async (req, res) => {
     const user = await User.findOne({ where: { resetPasswordToken: req.params.token } });
-    if (user && moment(user.resetPasswordExpires()).isAfter(moment())) {
+    if (user && moment(user.resetPasswordExpires).isAfter(moment())) {
       user.password = req.body.password;
       user.resetPasswordToken = null
       user.resetPasswordExpires = null

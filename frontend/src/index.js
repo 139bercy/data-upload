@@ -7,7 +7,12 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import httpInterceptor from './services/interceptor';
 
-const history = createBrowserHistory();
+import axios from 'axios'
+axios.defaults.baseURL = process.env.PUBLIC_URL;
+
+const history = createBrowserHistory({
+  basename: process.env.PUBLIC_URL
+});
 httpInterceptor(history);
 
 ReactDOM.render(

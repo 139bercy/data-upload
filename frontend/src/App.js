@@ -45,6 +45,11 @@ class App extends Component {
 
   logOut() {
     AuthService.logout();
+    this.setState({
+      currentUser: null,
+      isModerator: false,
+      isAdmin: false,
+    });
 
   }
 
@@ -90,9 +95,9 @@ class App extends Component {
             )}
             {currentUser ? (
               <li className="nav-item">
-                <a href="/login" className="nav-link" onClick={this.logOut}>
+                <Link to={"/login"} className="nav-link" onClick={this.logOut}>
                   Déconnexion du compte {currentUser.username}
-                </a>
+                </Link>
               </li>
             ) : (
               <li className="nav-item">
@@ -105,14 +110,20 @@ class App extends Component {
         </nav>
 
         <div className="container mt-5">
-          <Switch>
-            <Route exact path={["/", "/upload"]} component={Home} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/reset-password" component={ResetPassword} />
-            <Route path="/reset-password/:token" component={ResetPasswordEnd} />
-            <Route path="/admin" component={BoardAdmin} />
-            <Route path="/indexes" component={BoardIndexesComponent} />
-          </Switch>
+            { this.state.currentUser
+              ? <Switch>
+                <Route exact path={["/", "/upload"]} component={Home} />
+                <Route path="/admin" component={BoardAdmin} />
+                <Route path="/indexes" component={BoardIndexesComponent} />
+                <Route exact path="/login" component={Login} />
+                <Route component={Home} />
+              </Switch>
+              : <Switch>
+                  <Route exact path="/reset-password" component={ResetPassword} />
+                  <Route path="/reset-password/:token" component={ResetPasswordEnd} />
+                  <Route component={Login} />
+                </Switch>
+            }
         </div>
       </div>
     );

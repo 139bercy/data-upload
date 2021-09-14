@@ -52,21 +52,9 @@ module.exports = (sequelize) => {
     },
     resetPasswordToken: {
       type: Sequelize.STRING,
-      get() {
-        return () => this.getDataValue('resetPasswordToken')
-      },
-      set(value) {
-        this.setDataValue('resetPasswordToken', value);
-      },
     },
     resetPasswordExpires: {
       type: Sequelize.DATE,
-      get() {
-        return () => this.getDataValue('resetPasswordExpires')
-      },
-      set(value) {
-        this.setDataValue('resetPasswordExpires', value);
-      },
     }
   });
 

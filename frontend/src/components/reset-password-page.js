@@ -69,7 +69,7 @@ export default class ResetPassword extends Component {
       <div className="col-md-12">
         <div className="card card-container">
           <img
-            src="/marianne.svg"
+            src="marianne.svg"
             alt="profile-img"
             className="profile-img-card"
           />
@@ -116,7 +116,7 @@ export default class ResetPassword extends Component {
                 this.checkBtn = c;
               }}
             />
-        </Form>
+          </Form>
         </div>
       </div>
     );
