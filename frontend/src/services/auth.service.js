@@ -1,11 +1,11 @@
 import axios from "axios";
 
-const API_URL = "/api/auth/";
+const API_URL = "/api/auth";
 
 class AuthService {
   async login(username, password) {
     const response = await axios
-      .post(API_URL + "signin", {
+      .post(API_URL + "/signin", {
         username: username,
         password: password
       });
@@ -20,7 +20,7 @@ class AuthService {
   }
 
   register(username, email, password) {
-    return axios.post(API_URL + "signup", {
+    return axios.post(API_URL + "/signup", {
       username,
       email,
       password
@@ -32,11 +32,11 @@ class AuthService {
   }
 
   resetPassword(email) {
-    return axios.post(API_URL + "reset-password", {email: email});
+    return axios.post(API_URL + "/reset-password", {email: email});
   }
 
   resetPasswordEnd(password, token) {
-    return axios.post(API_URL + "reset-password/" + token, {password: password});
+    return axios.post(API_URL + "/reset-password/" + token, {password: password});
   }
 }
 

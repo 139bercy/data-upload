@@ -27,7 +27,6 @@ export default function Table({ columns, data }) {
 
   const handleFilterChange = e => {
     const value = e.target.value || "";
-    console.log(value);
     setGlobalFilter(value);
     setFilterInput(value);
   };

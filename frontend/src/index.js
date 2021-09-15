@@ -8,7 +8,7 @@ import * as serviceWorker from "./serviceWorker";
 import httpInterceptor from './services/interceptor';
 
 import axios from 'axios'
-axios.defaults.baseURL = '/data-upload';
+axios.defaults.baseURL = process.env.PUBLIC_URL;
 
 const history = createBrowserHistory({
   basename: process.env.PUBLIC_URL

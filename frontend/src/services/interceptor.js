@@ -1,18 +1,14 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
-function completeUrl(url) {
-  return process.env.PUBLIC_URL + url;
-}
-
 function shouldBeLoggedIn(request) {
   const url = request.url
   console.log(request)
-  return url !== completeUrl('/login') && url !== completeUrl('/api/auth/signin')
+  return url !== '/login' && url !== '/api/auth/signin'
   &&
-  url !== completeUrl('/reset-password') && url !== completeUrl('/api/auth/reset-password')
+  url !== '/reset-password' && url !== '/api/auth/reset-password'
   &&
-  !url.startsWith(completeUrl('/reset-password/')) && !url.startsWith(completeUrl('/api/auth/reset-password/'))
+  !url.startsWith('/reset-password/') && !url.startsWith('/api/auth/reset-password/')
 }
 
 export default function setupInterceptors(history) {

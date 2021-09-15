@@ -50,7 +50,7 @@ export default class ResetPassword extends Component {
       message: message
     }))
     .catch(error => {
-      console.log(error.status)
+      console.error(error)
       if (error.status === 403) {
         this.setState({
           loading: false,
