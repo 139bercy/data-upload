@@ -28,6 +28,7 @@ router.use('/api/users', require('./app/routes/user.routes'));
 router.use('/api/upload', require('./app/routes/upload.routes'));
 router.use('/api/indexes', require('./app/routes/index.routes'));
 router.use('/api/roles', require('./app/routes/roles.routes'));
+router.use('/api/tokens', require('./app/routes/api-token.routes'));
 
 app.use(process.env.PUBLIC_URL, router)
 

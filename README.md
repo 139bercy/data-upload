@@ -3,6 +3,7 @@
 Cette application a pour but de fournir un point d'entrée pour les métiers afin qu'ils puissent ajouter de la données dans les environnements d'analyse.
 
 De cette manière l'ingestion des données ne passe plus par les data-scientistes.
+Pour plus d'informations sur les usage, je vous invite à lire la [documentation suivante](documentation/USAGE.md)
 
 ## Développement
 La configuration de développement est basée sur Docker et Docker-Compose.

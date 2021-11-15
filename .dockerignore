@@ -1,3 +1,7 @@
 /backend
 /*/node_modules
 /*/Dockerfile
+.dockerignore
+/*/.dockerignore
+docker-compose*
+**.env
