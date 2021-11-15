@@ -101,6 +101,6 @@ Cependant ce mode d'authentification nécessite d'obtenir un token et donc d'eff
 
 Dans le cadre d'une automatisation de tâche, il peut être intéressant de pouvoir se passer de cette requête pour obtenir un token.
 C'est pourquoi nous avons aussi implémenté une authentification par token d'API. Ce token est stocké en base de données et doit être généré par l'utilisateur lui même.
-Il peut ensuite être supprimé ou désactiver si besoin.
+Il peut ensuite être supprimé ou désactivé si besoin.
 
 Dans l'exemple d'uplaod de fichier que vous pouvez voir plus haut c'est une authentification par ce type de token qui est spécifié grâce à l'usage du header `x-api-token`.
