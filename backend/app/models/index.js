@@ -22,13 +22,15 @@ const sequelize = new Sequelize(
 
 const db = {};
 
-db.User = require("../models/user.model.js")(sequelize);
-db.Role = require("../models/role.model.js")(sequelize);
+db.User = require("./user.model.js")(sequelize);
+db.Role = require("./role.model.js")(sequelize);
 db.Index = require("./index.model.js")(sequelize)
+db.APIToken = require("./api-token.model.js")(sequelize);
 
-require("../models/relation-role-user.js")(db);
-require("../models/relation-user-user.js")(db);
+require("./relation-role-user.js")(db);
+require("./relation-user-user.js")(db);
 require("./relation-index-user.js")(db);
+require("./relation-api-token-user.js")(db);
 
 db.ROLES = ["user", "moderator", "admin"];
 

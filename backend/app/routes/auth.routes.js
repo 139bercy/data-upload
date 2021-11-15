@@ -47,6 +47,7 @@ router.post("/signin",
 );
 
 const demandeResetPasswordDone = "Demande de réinitialisation de mot de passe prise en compte ! Si une demande avait déjà été émise il y a moins de " + moment.duration(ttl).locale("fr").humanize() + " alors il n'y aura pas de nouveau mail de réinitialisation !"
+
 router.post("/reset-password",
   async (req, res) => {
     email = req.body.email;
@@ -54,7 +55,7 @@ router.post("/reset-password",
       // TODO Find the associated user
       const user = await User.findOne({ where: { email: email } });
       if (user) {
-        if (user.resetPasswordToken && moment(user.resetPasswordExpires).before(moment())) {
+        if (user.resetPasswordToken && moment(user.resetPasswordExpires).isBefore(moment())) {
           // Pas d'invitation si une invitation est déjà en cours
           console.debug('Pas de demande de réinitialisation car une demande est déjà en cours !');
         } else {
